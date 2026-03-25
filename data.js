@@ -142,31 +142,32 @@ window.AWARDS_DATA = [
     ]
   },
   {
-    id: "effie-awards",
-    name: "Effie Awards",
+    id: "effie-europe",
+    name: "Effie Awards Europe",
     organization: "Effie Worldwide",
     color: "#2ECC71",
-    website: "https://effie.org/",
+    website: "https://www.effie-europe.com/",
     year: 2026,
-    location: "New York, USA",
-    eventDates: "June 2026",
+    location: "Europe",
+    eventDates: "October–November 2026",
     deadlines: [
-      { label: "1st Deadline", date: "2025-10-06", displayDate: "October 6, 2025" },
-      { label: "2nd Deadline", date: "2025-10-20", displayDate: "October 20, 2025" },
-      { label: "3rd Deadline", date: "2025-10-27", displayDate: "October 27, 2025" },
-      { label: "Final Deadline", date: "2025-11-03", displayDate: "November 3, 2025" },
-      { label: "Extension", date: "2025-11-13", displayDate: "November 13, 2025" }
+      { label: "Entries Open", date: "2026-06-01", displayDate: "June 2026" },
+      { label: "1st Deadline", date: "2026-07-30", displayDate: "July 30, 2026" },
+      { label: "2nd Deadline", date: "2026-08-13", displayDate: "August 13, 2026" },
+      { label: "3rd Deadline", date: "2026-08-27", displayDate: "August 27, 2026" },
+      { label: "Final Deadline", date: "2026-09-10", displayDate: "September 10, 2026" }
     ],
     fees: [
-      { tier: "1st Deadline", amount: "$995", note: "Best rate" },
-      { tier: "2nd Deadline", amount: "$1,940", note: "" },
-      { tier: "3rd Deadline", amount: "$2,845", note: "" },
-      { tier: "Final Deadline", amount: "$3,330", note: "" },
-      { tier: "Extension", amount: "$4,160", note: "Latest possible entry" }
+      { tier: "1st (Single-Market)", amount: "€995", note: "Best rate" },
+      { tier: "1st (Multi-Market)", amount: "€1,895", note: "Best rate" },
+      { tier: "2nd (Single/Multi)", amount: "€1,495 / €2,295", note: "" },
+      { tier: "3rd (Single/Multi)", amount: "€1,595 / €2,395", note: "" },
+      { tier: "Final (Single/Multi)", amount: "€1,695 / €2,495", note: "" }
     ],
     resources: [
-      { label: "USA Entry Details", url: "https://effie.org/partners/united-states/entry-details/", type: "entryguide" },
-      { label: "Entry Kit (PDF)", url: "https://s3.amazonaws.com/effie_assets/downloads/2026_Effie%20Awards%20US_Entry%20Kit.pdf", type: "rulebook" }
+      { label: "Call for Entries", url: "https://www.effie-europe.com/call-for-entries/", type: "entryguide" },
+      { label: "Fees & Deadlines", url: "https://www.effie-europe.com/call-for-entries/fees-deadlines/", type: "entryguide" },
+      { label: "Calendar", url: "https://www.effie-europe.com/calendar/", type: "categories" }
     ]
   },
   {
@@ -244,6 +245,32 @@ window.AWARDS_DATA = [
       { label: "Enter Now", url: "https://www.andyawards.com/enter-now/", type: "entryguide" },
       { label: "Official Rules", url: "https://www.andyawards.com/official-rules/", type: "rulebook" },
       { label: "FAQ", url: "https://www.andyawards.com/faq2025/", type: "faq" }
+    ]
+  },
+  {
+    id: "eurobest",
+    name: "Eurobest",
+    organization: "Lions Festivals",
+    color: "#E74C3C",
+    website: "https://www.eurobest.com/",
+    year: 2026,
+    location: "Europe",
+    eventDates: "November–December 2026",
+    deadlines: [
+      { label: "Entries Open", date: "2026-08-13", displayDate: "August 13, 2026" },
+      { label: "Standard Rate Ends", date: "2026-09-18", displayDate: "September 18, 2026" },
+      { label: "2nd Late Fee", date: "2026-10-02", displayDate: "October 2, 2026" },
+      { label: "Final Deadline", date: "2026-10-16", displayDate: "October 16, 2026" }
+    ],
+    fees: [
+      { tier: "Standard", amount: "See eurobest.com", note: "Before Sep 18" },
+      { tier: "1st Late Fee", amount: "+surcharge", note: "After Sep 18" },
+      { tier: "2nd Late Fee", amount: "+surcharge", note: "After Oct 2" }
+    ],
+    resources: [
+      { label: "Dates & Fees", url: "https://www.eurobest.com/support/dates-and-fees", type: "entryguide" },
+      { label: "Entry Guide", url: "https://www.eurobest.com/support/eurobest-awards-entry-guide", type: "entryguide" },
+      { label: "Help Entering", url: "https://www.eurobest.com/support/help-entering", type: "faq" }
     ]
   },
   {

@@ -95,6 +95,14 @@ const SOURCES = [
     keywords: ['deadline', 'fee', 'early', 'final', 'extended', 'single', 'campaign']
   },
   {
+    id: 'eurobest',
+    name: 'Eurobest',
+    urls: [
+      'https://www.eurobest.com/support/dates-and-fees'
+    ],
+    keywords: ['deadline', 'fee', 'date', 'entry', 'late', 'standard', 'submit']
+  },
+  {
     id: 'guldagget',
     name: 'Guldägget',
     urls: [
