@@ -272,6 +272,7 @@ window.AWARDS_DATA = [
       { label: "Submission Info", url: "https://guldagget.se/tavla/inlamning/", type: "entryguide" },
       { label: "Categories", url: "https://guldagget.se/tavla/tavlingskategorier/", type: "categories" },
       { label: "Competition Info", url: "https://guldagget.se/tavla/tavlingsinformation/", type: "rulebook" },
+      { label: "FAQ", url: "https://guldagget.se/tavla/fragor-svar/", type: "faq" },
       { label: "Enter via Komm", url: "https://komm.awardsplatform.com/", type: "entryguide" }
     ]
   },
@@ -344,6 +345,34 @@ window.MANADENS_DATA = {
       id: "ide",
       name: "Månadens Idé",
       description: "Bästa kreativa idé – oavsett kanal eller format",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "content",
+      name: "Månadens Content",
+      description: "Bästa content marketing – artiklar, video, branded content",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "pr",
+      name: "Månadens PR",
+      description: "Bästa PR-kampanj – earned media, presshändelser",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "digital",
+      name: "Månadens Digital",
+      description: "Bästa digitala kampanj – webb, app, sociala medier",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "audio",
+      name: "Månadens Audio",
+      description: "Bästa ljudkampanj – radio, podd, digital audio",
       deadlineInfo: "Löpande, månatlig bedömning",
       nextDeadline: "2026-04-30"
     }
