@@ -322,23 +322,9 @@ window.MANADENS_DATA = {
       nextDeadline: "2026-04-30"
     },
     {
-      id: "print",
-      name: "Månadens Print",
-      description: "Bästa tryckta annons – tidningar, magasin",
-      deadlineInfo: "Löpande, månatlig bedömning",
-      nextDeadline: "2026-04-30"
-    },
-    {
-      id: "utomhus",
-      name: "Månadens Utomhus",
-      description: "Bästa utomhusreklam – affischer, DOOH, installationer",
-      deadlineInfo: "Löpande, månatlig bedömning",
-      nextDeadline: "2026-04-30"
-    },
-    {
-      id: "design",
-      name: "Månadens Design",
-      description: "Bästa design – identitet, förpackning, grafisk form",
+      id: "hantverk",
+      name: "Månadens Hantverk",
+      description: "Bästa hantverk – craft, produktion, utförande",
       deadlineInfo: "Löpande, månatlig bedömning",
       nextDeadline: "2026-04-30"
     },
@@ -350,30 +336,23 @@ window.MANADENS_DATA = {
       nextDeadline: "2026-04-30"
     },
     {
-      id: "content",
-      name: "Månadens Content",
-      description: "Bästa content marketing – artiklar, video, branded content",
+      id: "politik",
+      name: "Månadens Politik",
+      description: "Bästa politiska kampanj eller samhällskommunikation",
       deadlineInfo: "Löpande, månatlig bedömning",
       nextDeadline: "2026-04-30"
     },
     {
-      id: "pr",
-      name: "Månadens PR",
-      description: "Bästa PR-kampanj – earned media, presshändelser",
+      id: "print",
+      name: "Månadens Print",
+      description: "Bästa tryckta annons – tidningar, magasin",
       deadlineInfo: "Löpande, månatlig bedömning",
       nextDeadline: "2026-04-30"
     },
     {
-      id: "digital",
-      name: "Månadens Digital",
-      description: "Bästa digitala kampanj – webb, app, sociala medier",
-      deadlineInfo: "Löpande, månatlig bedömning",
-      nextDeadline: "2026-04-30"
-    },
-    {
-      id: "audio",
-      name: "Månadens Audio",
-      description: "Bästa ljudkampanj – radio, podd, digital audio",
+      id: "utomhus",
+      name: "Månadens Utomhus",
+      description: "Bästa utomhusreklam – affischer, DOOH, installationer",
       deadlineInfo: "Löpande, månatlig bedömning",
       nextDeadline: "2026-04-30"
     }
