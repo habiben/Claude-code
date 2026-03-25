@@ -392,8 +392,7 @@ window.MANADENS_DATA = {
     { rank: 6, agency: "INGO Stockholm", points: 6, wins: 1, podiums: 2 },
     { rank: 7, agency: "Garbergs", points: 5, wins: 1, podiums: 1 },
     { rank: 8, agency: "JMW Golin", points: 4, wins: 0, podiums: 2 },
-    { rank: 9, agency: "OTW", points: 3, wins: 0, podiums: 1 },
-    { rank: 10, agency: "Wieden+Kennedy", points: 2, wins: 0, podiums: 1 }
+    { rank: 9, agency: "OTW", points: 3, wins: 0, podiums: 1 }
   ],
   lastUpdated: "2026-03-25",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
