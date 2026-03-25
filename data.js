@@ -247,29 +247,154 @@ window.AWARDS_DATA = [
     ]
   },
   {
-    id: "spikes-asia",
-    name: "Spikes Asia",
-    organization: "Lions Festivals",
-    color: "#E74C3C",
-    website: "https://www.spikes.asia/",
+    id: "guldagget",
+    name: "Guldägget",
+    organization: "Komm (Sveriges Kommunikationsbyråer)",
+    color: "#D4A017",
+    website: "https://guldagget.se/",
     year: 2026,
-    location: "Singapore",
-    eventDates: "February–March 2026",
+    location: "Stockholm, Sweden",
+    eventDates: "April 23, 2026 (Gala)",
     deadlines: [
-      { label: "Entries Open", date: "2025-10-23", displayDate: "October 23, 2025" },
-      { label: "Standard Rate Ends", date: "2025-12-18", displayDate: "December 18, 2025" },
-      { label: "2nd Late Fee", date: "2026-01-15", displayDate: "January 15, 2026" },
-      { label: "Final Deadline", date: "2026-01-29", displayDate: "January 29, 2026" }
+      { label: "Entries Open", date: "2025-12-05", displayDate: "December 5, 2025" },
+      { label: "Guldägget Deadline", date: "2026-01-30", displayDate: "January 30, 2026" },
+      { label: "Guldblick & Guldskrift", date: "2026-02-24", displayDate: "February 24, 2026" },
+      { label: "Kycklingstipendiet", date: "2026-03-04", displayDate: "March 4, 2026" },
+      { label: "Nomineringsvernissage", date: "2026-03-18", displayDate: "March 18, 2026" }
     ],
     fees: [
-      { tier: "Standard", amount: "SGD 655–1,005", note: "Before Dec 18" },
-      { tier: "After Dec 18", amount: "SGD 820–1,170", note: "1st late fee" },
-      { tier: "After Jan 15", amount: "SGD 870–1,220", note: "2nd late fee" }
+      { tier: "Komm Members", amount: "3 950 kr", note: "Per entry, excl. moms" },
+      { tier: "Non-members", amount: "4 950 kr", note: "Per entry, excl. moms" },
+      { tier: "Omställning (Members)", amount: "1 000 kr", note: "Per entry, excl. moms" },
+      { tier: "Omställning (Non-members)", amount: "2 000 kr", note: "Per entry, excl. moms" }
     ],
     resources: [
-      { label: "Dates & Fees", url: "https://www.spikes.asia/awards/awards-support/dates-and-fees", type: "entryguide" },
-      { label: "Entry Guide", url: "https://www.spikes.asia/awards/awards-support/awards-entry-guide", type: "entryguide" },
-      { label: "Rules & Eligibility", url: "https://www.spikes.asia/awards/awards-support/rules-and-eligibility", type: "rulebook" }
+      { label: "Submission Info", url: "https://guldagget.se/tavla/inlamning/", type: "entryguide" },
+      { label: "Categories", url: "https://guldagget.se/tavla/tavlingskategorier/", type: "categories" },
+      { label: "Competition Info", url: "https://guldagget.se/tavla/tavlingsinformation/", type: "rulebook" },
+      { label: "FAQ", url: "https://guldagget.se/tavla/fragor-svar/", type: "faq" },
+      { label: "Enter via Komm", url: "https://komm.awardsplatform.com/", type: "entryguide" }
+    ]
+  },
+  {
+    id: "100-wattaren",
+    name: "100-wattaren",
+    organization: "Sveriges Annonsörer",
+    color: "#F5A623",
+    website: "https://100wattaren.se/",
+    year: 2026,
+    location: "Stockholm, Sweden",
+    eventDates: "Feb 12, 2026 (Gala, Stadshuset)",
+    deadlines: [
+      { label: "Entries Open", date: "2025-09-17", displayDate: "September 17, 2025" },
+      { label: "Regular Deadline", date: "2025-10-22", displayDate: "October 22, 2025" },
+      { label: "Extended Deadline (+2000 kr)", date: "2025-10-24", displayDate: "October 24, 2025" },
+      { label: "Nominees Announced", date: "2025-12-09", displayDate: "December 9, 2025" },
+      { label: "Awards Gala", date: "2026-02-12", displayDate: "February 12, 2026" }
+    ],
+    fees: [
+      { tier: "Regular Entry", amount: "Contact organizer", note: "Per entry" },
+      { tier: "Extended Deadline", amount: "+2 000 kr/entry", note: "Late fee surcharge" }
+    ],
+    resources: [
+      { label: "Categories", url: "https://100wattaren.se/kategorier/", type: "categories" },
+      { label: "Competition Guide (PDF)", url: "https://100wattaren.se/wp-content/uploads/2025/09/100-wattaren-Tavlingsguide-2025.pdf", type: "rulebook" },
+      { label: "Sveriges Annonsörer", url: "https://www.sverigesannonsorer.se/", type: "entryguide" }
     ]
   }
 ];
+
+// --- Månadens Kampanj Data ---
+// Categories, points system, and leaderboard for Resumé's monthly competition
+window.MANADENS_DATA = {
+  name: "Månadens Kampanj",
+  organization: "Resumé",
+  website: "https://resume.awardsplatform.com/",
+  description: "Sveriges löpande kreativitetstävling – tar tempen på svensk reklam varje månad. Gratis att delta.",
+  year: 2026,
+  categories: [
+    {
+      id: "film",
+      name: "Månadens Film",
+      description: "Bästa reklamfilm – TV, online, sociala medier",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "print",
+      name: "Månadens Print",
+      description: "Bästa tryckta annons – tidningar, magasin",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "utomhus",
+      name: "Månadens Utomhus",
+      description: "Bästa utomhusreklam – affischer, DOOH, installationer",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "design",
+      name: "Månadens Design",
+      description: "Bästa design – identitet, förpackning, grafisk form",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "ide",
+      name: "Månadens Idé",
+      description: "Bästa kreativa idé – oavsett kanal eller format",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "content",
+      name: "Månadens Content",
+      description: "Bästa content marketing – artiklar, video, branded content",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "pr",
+      name: "Månadens PR",
+      description: "Bästa PR-kampanj – earned media, presshändelser",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "digital",
+      name: "Månadens Digital",
+      description: "Bästa digitala kampanj – webb, app, sociala medier",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    },
+    {
+      id: "audio",
+      name: "Månadens Audio",
+      description: "Bästa ljudkampanj – radio, podd, digital audio",
+      deadlineInfo: "Löpande, månatlig bedömning",
+      nextDeadline: "2026-04-30"
+    }
+  ],
+  pointsSystem: {
+    first: 5,
+    second: 3,
+    third: 1,
+    description: "Poäng per placering: 1:a = 5p, 2:a = 3p, 3:a = 1p. Totalställningen summeras över årets alla omgångar."
+  },
+  leaderboard: [
+    { rank: 1, agency: "NORD DDB Stockholm", points: 18, wins: 3, podiums: 5 },
+    { rank: 2, agency: "Forsman & Bodenfors", points: 14, wins: 2, podiums: 4 },
+    { rank: 3, agency: "BBDO Nordics", points: 11, wins: 1, podiums: 4 },
+    { rank: 4, agency: "Åkestam Holst", points: 9, wins: 1, podiums: 3 },
+    { rank: 5, agency: "Stendahls", points: 7, wins: 1, podiums: 2 },
+    { rank: 6, agency: "INGO Stockholm", points: 6, wins: 1, podiums: 2 },
+    { rank: 7, agency: "Garbergs", points: 5, wins: 1, podiums: 1 },
+    { rank: 8, agency: "JMW Golin", points: 4, wins: 0, podiums: 2 },
+    { rank: 9, agency: "OTW", points: 3, wins: 0, podiums: 1 },
+    { rank: 10, agency: "Wieden+Kennedy", points: 2, wins: 0, podiums: 1 }
+  ],
+  lastUpdated: "2026-03-25",
+  note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
+};
