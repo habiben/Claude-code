@@ -1,5 +1,6 @@
 const express = require('express');
 const path    = require('path');
+const fs      = require('fs');
 const { scrapeLinkedIn, BASE_KEYWORDS } = require('./scraper');
 
 const app  = express();
@@ -7,7 +8,11 @@ const jobs = new Map();
 let   jobCounter = 0;
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(__dirname));
+
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.get('/config', (_req, res) => {
   res.json({ baseKeywords: BASE_KEYWORDS });
@@ -23,7 +28,7 @@ app.post('/scrape', (req, res) => {
     });
   }
 
-  const jobId        = String(++jobCounter);
+  const jobId = String(++jobCounter);
   const { extraKeywords = [] } = req.body;
 
   const job = { id: jobId, status: 'running', events: [], clients: new Set() };
@@ -76,9 +81,8 @@ app.get('/stream/:id', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`LinkedIn Scraper → http://localhost:${PORT}`);
-  if (!process.env.LINKEDIN_LI_AT) {
-    console.warn('OBS: LINKEDIN_LI_AT saknas. Ange cookies som miljövariabler.');
-  }
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`LinkedIn Scraper → port ${PORT}`);
+  console.log(`__dirname: ${__dirname}`);
+  console.log(`index.html finns: ${fs.existsSync(path.join(__dirname, 'index.html'))}`);
 });
