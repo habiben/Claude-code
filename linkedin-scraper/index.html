@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkedIn Scraper</title>
+  <title>Law just got more attractive</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #0a0a0a; color: #e5e5e5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; }
@@ -60,8 +60,8 @@
 </head>
 <body>
 <div class="container">
-  <h1>LinkedIn Scraper</h1>
-  <p class="subtitle">Hämtar inlägg och kommentarer från LinkedIn</p>
+  <h1>Law just got more attractive</h1>
+  <p class="subtitle">to look for on LinkedIn.</p>
 
   <div class="section">
     <span class="label">Bassöktermer — alltid aktiva</span>
@@ -112,8 +112,7 @@
     }
   });
 
-  // Also support comma as separator
-  chipIn.addEventListener('input', e => {
+  chipIn.addEventListener('input', () => {
     if (chipIn.value.endsWith(',')) {
       const val = chipIn.value.slice(0, -1).trim();
       if (val) { addChip(val); chipIn.value = ''; }
