@@ -56,43 +56,33 @@ function liGet(urlPath, { liAt, sessionToken }) {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function isPostUrn(urn) {
-  return urn.includes(':activity:') || urn.includes(':ugcPost:') || urn.includes(':share:');
-}
-
+// Walk the entire response object and extract all activity URNs
 function extractUrnsFromBody(body) {
   const urns = [];
+  const ACTIVITY_RE = /(urn:li:(?:activity|ugcPost|share):[0-9]+)/g;
+
   function walk(obj) {
     if (!obj || typeof obj !== 'object') return;
     if (Array.isArray(obj)) { obj.forEach(walk); return; }
-    for (const key of ['targetUrn', 'trackingUrn', 'entityUrn', 'updateUrn']) {
-      const val = obj[key];
-      if (typeof val === 'string' && isPostUrn(val)) {
-        const m = val.match(/(urn:li:(?:activity|ugcPost|share):[0-9]+)/);
-        if (m) urns.push(m[1]);
+    for (const val of Object.values(obj)) {
+      if (typeof val === 'string') {
+        // matchAll finds all activity URNs even inside compound URNs like fsd_update:(...)
+        for (const m of val.matchAll(ACTIVITY_RE)) urns.push(m[1]);
+      } else if (val && typeof val === 'object') {
+        walk(val);
       }
     }
-    for (const key of ['elements', 'items', 'item', 'entityResult', 'results', 'data', 'paging']) {
-      if (key !== 'paging' && obj[key]) walk(obj[key]);
-    }
   }
+
   walk(body);
   return [...new Set(urns)];
 }
 
+// Working URL format confirmed via /debug endpoint
 function buildSearchUrls(keyword, count) {
-  // LinkedIn QueryQL does NOT want encodeURIComponent on the keyword inside ()
-  // Use encodeURIComponent only for the outer query string value
-  const kw = keyword; // raw unicode — LinkedIn handles it
+  const kw = encodeURIComponent(keyword);
   return [
-    // 2024 dash search — minimal query
-    `/voyager/api/voyagerSearchDashClusters?q=all&count=${count}&origin=GLOBAL_SEARCH_HEADER&query=(keywords:${encodeURIComponent(kw)},flagshipSearchIntent:SEARCH_SRP,queryParameters:(resultType:List(CONTENT)),includeFiltersInResponse:false)`,
-    // Same but with decoration
-    `/voyager/api/voyagerSearchDashClusters?decorationId=com.linkedin.voyager.dash.deco.search.SearchCluster-2&q=all&count=${count}&origin=GLOBAL_SEARCH_HEADER&query=(keywords:${encodeURIComponent(kw)},flagshipSearchIntent:SEARCH_SRP,queryParameters:(resultType:List(CONTENT)),includeFiltersInResponse:false)`,
-    // Minimal — just keywords
-    `/voyager/api/voyagerSearchDashClusters?q=all&count=${count}&query=(keywords:${encodeURIComponent(kw)})`,
-    // Try typeahead search
-    `/voyager/api/typeahead/hitsV2?keywords=${encodeURIComponent(kw)}&origin=SWITCH_SEARCH_VERTICAL&q=type&type=CONTENT&count=${count}`,
+    `/voyager/api/voyagerSearchDashClusters?q=all&count=${count}&origin=GLOBAL_SEARCH_HEADER&query=(keywords:${kw},flagshipSearchIntent:SEARCH_SRP,queryParameters:(resultType:List(CONTENT)),includeFiltersInResponse:false)`,
   ];
 }
 
@@ -101,9 +91,9 @@ async function searchPosts(keyword, creds) {
     try {
       await sleep(400);
       const { status, body } = await liGet(url, creds);
-      if (status !== 200 || typeof body !== 'object') continue;
-      const urns = extractUrnsFromBody(body);
-      if (urns.length > 0) return urns;
+      if (status === 200 && typeof body === 'object') {
+        return extractUrnsFromBody(body);
+      }
     } catch { continue; }
   }
   return [];
@@ -188,7 +178,9 @@ async function scrapeLinkedIn({ liAt, jsessionid, extraKeywords = [], onProgress
         await sleep(900);
         const post = await fetchPost(urn, creds);
         if (!post) continue;
-        post.commentsList = post.comments > 0 ? await (async () => { await sleep(400); return fetchComments(urn, creds); })() : [];
+        post.commentsList = post.comments > 0
+          ? await (async () => { await sleep(400); return fetchComments(urn, creds); })()
+          : [];
         const full = { ...post, matchedKeyword: keyword, isExtra };
         allPosts.push(full);
         onProgress?.({ type: 'post', post: full });
