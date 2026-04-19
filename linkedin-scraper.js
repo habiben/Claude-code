@@ -12,7 +12,8 @@
 //        export LINKEDIN_LI_AT="your_li_at_value"
 //        export LINKEDIN_JSESSIONID="your_jsessionid_value"
 //
-// Run:  node linkedin-scraper.js
+// Run (standard):  node linkedin-scraper.js
+// Run (extra terms): node linkedin-scraper.js "Publicis" "Saatchi Stockholm"
 // Cron: 0 8 * * 1 cd /path/to/project && node linkedin-scraper.js
 
 const https = require('https');
@@ -23,7 +24,7 @@ const path  = require('path');
 // Configuration
 // ============================================================
 
-const LI_AT     = process.env.LINKEDIN_LI_AT     || '';
+const LI_AT      = process.env.LINKEDIN_LI_AT      || '';
 const JSESSIONID = process.env.LINKEDIN_JSESSIONID || '';
 
 if (!LI_AT || !JSESSIONID) {
@@ -35,7 +36,7 @@ if (!LI_AT || !JSESSIONID) {
 // Strip surrounding quotes LinkedIn sometimes adds to JSESSIONID
 const SESSION_TOKEN = JSESSIONID.replace(/^"|"$/g, '');
 
-// Keywords to search on LinkedIn
+// Base keywords — always searched
 const SEARCH_KEYWORDS = [
   'Guldägget',
   '100-wattaren',
@@ -43,6 +44,13 @@ const SEARCH_KEYWORDS = [
   'svensk reklam',
   'reklambyrå award'
 ];
+
+// Extra keywords passed as CLI arguments, e.g.:
+//   node linkedin-scraper.js "Publicis" "Saatchi Stockholm"
+const EXTRA_KEYWORDS = process.argv.slice(2).filter(a => !a.startsWith('-'));
+
+// Combined list used at runtime (base + temporary extras)
+const ACTIVE_KEYWORDS = [...SEARCH_KEYWORDS, ...EXTRA_KEYWORDS];
 
 // Agency names to look for in post text / author fields
 const TRACKED_AGENCIES = [
@@ -75,14 +83,14 @@ function liGet(urlPath) {
       path: urlPath,
       method: 'GET',
       headers: {
-        'User-Agent':               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        'Accept':                   'application/vnd.linkedin.normalized+json+2.1',
-        'Accept-Language':          'sv-SE,sv;q=0.9,en;q=0.8',
-        'x-li-lang':                'sv_SE',
-        'x-li-track':               JSON.stringify({ clientVersion: '1.13.12143', mpVersion: '1.13.12143', osName: 'web', timezoneOffset: 1, timezone: 'Europe/Stockholm', deviceFormFactor: 'DESKTOP', mpName: 'voyager-web' }),
-        'x-restli-protocol-version':'2.0.0',
-        'csrf-token':               SESSION_TOKEN,
-        'Cookie':                   `li_at=${LI_AT}; JSESSIONID="${SESSION_TOKEN}"`
+        'User-Agent':                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept':                    'application/vnd.linkedin.normalized+json+2.1',
+        'Accept-Language':           'sv-SE,sv;q=0.9,en;q=0.8',
+        'x-li-lang':                 'sv_SE',
+        'x-li-track':                JSON.stringify({ clientVersion: '1.13.12143', mpVersion: '1.13.12143', osName: 'web', timezoneOffset: 1, timezone: 'Europe/Stockholm', deviceFormFactor: 'DESKTOP', mpName: 'voyager-web' }),
+        'x-restli-protocol-version': '2.0.0',
+        'csrf-token':                SESSION_TOKEN,
+        'Cookie':                    `li_at=${LI_AT}; JSESSIONID="${SESSION_TOKEN}"`
       },
       timeout: 20000
     };
@@ -117,8 +125,6 @@ function sleep(ms) {
 // Voyager API helpers
 // ============================================================
 
-// Search for content posts matching a keyword.
-// Returns array of activity URNs like "urn:li:activity:1234567890"
 async function searchPosts(keyword) {
   const encoded = encodeURIComponent(keyword);
   const url = `/voyager/api/search/blended?keywords=${encoded}&origin=GLOBAL_SEARCH_HEADER&q=all&start=0&count=${MAX_POSTS_PER_KEYWORD}&filters=List(resultType-%3ECONTENT)`;
@@ -127,8 +133,6 @@ async function searchPosts(keyword) {
   if (status !== 200 || typeof body !== 'object') return [];
 
   const urns = [];
-
-  // Voyager blended search nests results under "elements" → "elements"
   const elements = body?.elements || body?.data?.elements || [];
   for (const group of elements) {
     for (const item of (group.elements || [])) {
@@ -138,11 +142,9 @@ async function searchPosts(keyword) {
       }
     }
   }
-
   return urns;
 }
 
-// Fetch details for a single post URN.
 async function fetchPost(urn) {
   const encodedUrn = encodeURIComponent(urn);
   const url = `/voyager/api/feed/updates/${encodedUrn}?updateType=STORY_UPDATE&ursaContextType=FEED_DETAIL`;
@@ -153,7 +155,6 @@ async function fetchPost(urn) {
   return extractPostData(body, urn);
 }
 
-// Fetch comments for a post URN.
 async function fetchComments(urn) {
   const encodedUrn = encodeURIComponent(urn);
   const url = `/voyager/api/feed/comments?updateId=${encodedUrn}&count=${MAX_COMMENTS_PER_POST}&start=0`;
@@ -187,39 +188,24 @@ function extractAuthorName(actor) {
 }
 
 function extractPostData(body, urn) {
-  // Voyager wraps the real update inside body.value or body.data
-  const update = body?.value || body?.data || body;
-
+  const update      = body?.value || body?.data || body;
   const actor       = update?.actor || {};
   const commentary  = update?.commentary || update?.specificContent?.['com.linkedin.ugc.ShareContent'] || {};
   const text        = commentary?.text?.text || commentary?.shareCommentary?.text || update?.message?.text || '';
   const social      = update?.socialDetail?.totalSocialActivityCounts || update?.socialDetail || {};
-  const likes       = social?.numLikes  || social?.numReactions || 0;
+  const likes       = social?.numLikes   || social?.numReactions || 0;
   const comments    = social?.numComments || 0;
-  const shares      = social?.numShares  || 0;
+  const shares      = social?.numShares   || 0;
   const created     = update?.actor?.subDescription?.text || '';
-
   const authorName  = extractAuthorName(actor);
 
-  // Detect if any tracked agency is mentioned
-  const fullText    = `${authorName} ${text}`.toLowerCase();
+  const fullText          = `${authorName} ${text}`.toLowerCase();
   const mentionedAgencies = TRACKED_AGENCIES.filter(a => fullText.includes(a.toLowerCase()));
 
-  return {
-    urn,
-    author: authorName,
-    text:   text.trim(),
-    likes,
-    comments,
-    shares,
-    created,
-    mentionedAgencies,
-    url: urnToUrl(urn)
-  };
+  return { urn, author: authorName, text: text.trim(), likes, comments, shares, created, mentionedAgencies, url: urnToUrl(urn) };
 }
 
 function urnToUrl(urn) {
-  // urn:li:activity:1234567 → linkedin.com/feed/update/urn:li:activity:1234567
   return `https://www.linkedin.com/feed/update/${encodeURIComponent(urn)}`;
 }
 
@@ -232,12 +218,20 @@ async function scrapeLinkedIn() {
   console.log('  LinkedIn Scraper — Swedish Ad Industry');
   console.log('='.repeat(70));
   console.log();
+  console.log(`  Base keywords    (${SEARCH_KEYWORDS.length}): ${SEARCH_KEYWORDS.join(', ')}`);
+  if (EXTRA_KEYWORDS.length > 0) {
+    console.log(`  Extra keywords   (${EXTRA_KEYWORDS.length}): ${EXTRA_KEYWORDS.join(', ')}  [tilfälliga]`);
+  }
+  console.log(`  Total to search       : ${ACTIVE_KEYWORDS.length} terms`);
+  console.log();
 
-  const allPosts    = [];
-  const seenUrns    = new Set();
+  const allPosts = [];
+  const seenUrns = new Set();
 
-  for (const keyword of SEARCH_KEYWORDS) {
-    process.stdout.write(`  Searching: "${keyword}"...`);
+  for (const keyword of ACTIVE_KEYWORDS) {
+    const isExtra = EXTRA_KEYWORDS.includes(keyword);
+    const label   = isExtra ? `"${keyword}" [extra]` : `"${keyword}"`;
+    process.stdout.write(`  Searching: ${label}...`);
 
     let urns;
     try {
@@ -245,7 +239,7 @@ async function scrapeLinkedIn() {
     } catch (err) {
       console.log(` FAILED: ${err.message}`);
       if (err.message.includes('session expired')) {
-        console.error('\n  Your LinkedIn session has expired. Re-copy your cookies and try again.');
+        console.error('\n  LinkedIn session expired. Re-copy your cookies and try again.');
         process.exit(1);
       }
       continue;
@@ -256,7 +250,7 @@ async function scrapeLinkedIn() {
     fresh.forEach(u => seenUrns.add(u));
 
     for (const urn of fresh) {
-      await sleep(800); // polite delay between requests
+      await sleep(800);
 
       let post;
       try {
@@ -268,7 +262,6 @@ async function scrapeLinkedIn() {
 
       if (!post) continue;
 
-      // Fetch comments if the post has any
       if (post.comments > 0) {
         try {
           await sleep(500);
@@ -280,8 +273,7 @@ async function scrapeLinkedIn() {
         post.commentsList = [];
       }
 
-      allPosts.push({ ...post, matchedKeyword: keyword });
-
+      allPosts.push({ ...post, matchedKeyword: keyword, isExtraKeyword: isExtra });
       console.log(`    ✓ ${post.author.substring(0, 40).padEnd(40)} 👍 ${String(post.likes).padStart(4)}  💬 ${String(post.comments).padStart(3)}`);
     }
   }
@@ -306,14 +298,17 @@ function printReport(posts) {
   const agencyPosts = posts.filter(p => p.mentionedAgencies.length > 0);
   console.log(`  Agency-related posts  : ${agencyPosts.length}`);
 
+  if (EXTRA_KEYWORDS.length > 0) {
+    const extraPosts = posts.filter(p => p.isExtraKeyword);
+    console.log(`  Posts via extra terms : ${extraPosts.length}  (${EXTRA_KEYWORDS.join(', ')})`);
+  }
+
   if (agencyPosts.length > 0) {
     console.log();
     console.log('  Agency mentions:');
     const counts = {};
     for (const p of agencyPosts) {
-      for (const a of p.mentionedAgencies) {
-        counts[a] = (counts[a] || 0) + 1;
-      }
+      for (const a of p.mentionedAgencies) counts[a] = (counts[a] || 0) + 1;
     }
     Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
@@ -353,11 +348,12 @@ async function main() {
 
   printReport(posts);
 
-  // Save full results as JSON
   const report = {
     runDate,
     totalPosts: posts.length,
-    searchKeywords: SEARCH_KEYWORDS,
+    baseKeywords: SEARCH_KEYWORDS,
+    extraKeywords: EXTRA_KEYWORDS,
+    activeKeywords: ACTIVE_KEYWORDS,
     trackedAgencies: TRACKED_AGENCIES,
     posts
   };
