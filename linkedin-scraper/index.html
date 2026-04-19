@@ -8,48 +8,34 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #0a0a0a; color: #e5e5e5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; }
     .container { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
-
     h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
     .subtitle { color: #666; font-size: 0.95rem; margin-bottom: 44px; }
-
     .section { margin-bottom: 28px; }
     .label { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #666; margin-bottom: 10px; }
-
-    /* Base keywords */
     .base-keywords { display: flex; flex-wrap: wrap; gap: 8px; }
     .base-kw { background: #141414; border: 1px solid #2a2a2a; color: #888; padding: 5px 13px; border-radius: 20px; font-size: 0.82rem; }
-
-    /* Chip input */
     .chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: #111; border: 1px solid #2a2a2a; border-radius: 10px; padding: 10px 12px; min-height: 52px; cursor: text; transition: border-color 0.15s; }
     .chip-wrap:focus-within { border-color: #0a66c2; }
     .chip { display: inline-flex; align-items: center; gap: 5px; background: #0a66c2; color: #fff; padding: 4px 11px; border-radius: 16px; font-size: 0.83rem; font-weight: 500; }
-    .chip-x { cursor: pointer; opacity: 0.7; font-size: 1.1rem; line-height: 1; padding: 0 2px; }
+    .chip-x { cursor: pointer; opacity: 0.7; font-size: 1.1rem; line-height: 1; padding: 0 2px; border: none; background: none; color: inherit; }
     .chip-x:hover { opacity: 1; }
-    .chip-input { background: transparent; border: none; outline: none; color: #e5e5e5; font-size: 0.9rem; min-width: 180px; flex: 1; }
+    .chip-input { background: transparent; border: none; outline: none; color: #e5e5e5; font-size: 0.9rem; min-width: 200px; flex: 1; }
     .chip-hint { font-size: 0.78rem; color: #444; margin-top: 7px; }
-
-    /* Button */
-    .run-btn { background: #0a66c2; color: #fff; border: none; padding: 13px 30px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.15s, opacity 0.15s; margin-top: 4px; }
+    .run-btn { background: #0a66c2; color: #fff; border: none; padding: 13px 30px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
     .run-btn:hover:not(:disabled) { background: #0857a8; }
     .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    /* Progress */
-    .progress { display: none; background: #0d0d0d; border: 1px solid #1e1e1e; border-radius: 10px; padding: 18px 20px; margin-top: 28px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; font-size: 0.8rem; line-height: 1.7; max-height: 260px; overflow-y: auto; }
+    .progress { display: none; background: #0d0d0d; border: 1px solid #1e1e1e; border-radius: 10px; padding: 18px 20px; margin-top: 28px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8rem; line-height: 1.7; max-height: 260px; overflow-y: auto; }
     .progress.show { display: block; }
     .log-line { color: #555; }
-    .log-line.kw  { color: #5aabff; }
-    .log-line.ok  { color: #4caf7d; }
-    .log-line.post { color: #ccc; }
-    .log-line.err  { color: #e05; }
+    .log-line.kw    { color: #5aabff; }
+    .log-line.ok    { color: #4caf7d; }
+    .log-line.post  { color: #ccc; }
+    .log-line.err   { color: #e05; }
     .log-line.extra { color: #f5a623; }
-
-    /* Stats */
     .stats { display: flex; gap: 14px; flex-wrap: wrap; margin: 32px 0 24px; }
     .stat { flex: 1; min-width: 110px; background: #111; border: 1px solid #1e1e1e; border-radius: 10px; padding: 16px 20px; text-align: center; }
     .stat-n { font-size: 2rem; font-weight: 700; color: #0a66c2; line-height: 1; }
     .stat-l { font-size: 0.75rem; color: #555; margin-top: 5px; }
-
-    /* Post cards */
     .posts { display: flex; flex-direction: column; gap: 14px; }
     .card { background: #111; border: 1px solid #1e1e1e; border-radius: 12px; padding: 20px; }
     .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
@@ -70,14 +56,12 @@
     .comment-text { font-size: 0.84rem; color: #aaa; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
     .card-link { display: inline-block; margin-top: 14px; color: #0a66c2; font-size: 0.8rem; text-decoration: none; }
     .card-link:hover { text-decoration: underline; }
-
-    .empty { color: #444; font-size: 0.9rem; text-align: center; padding: 40px 0; }
   </style>
 </head>
 <body>
 <div class="container">
   <h1>LinkedIn Scraper</h1>
-  <p class="subtitle">Hämtar inlägg och kommentarer om svensk reklaambranschen</p>
+  <p class="subtitle">Hämtar inlägg och kommentarer från LinkedIn</p>
 
   <div class="section">
     <span class="label">Bassöktermer — alltid aktiva</span>
@@ -86,10 +70,10 @@
 
   <div class="section">
     <span class="label">Extra söktermer — tillfälliga</span>
-    <div class="chip-wrap" id="chipWrap" onclick="document.getElementById('chipIn').focus()">
-      <input id="chipIn" class="chip-input" placeholder="Skriv en term och tryck Enter...">
+    <div class="chip-wrap" id="chipWrap">
+      <input id="chipIn" class="chip-input" placeholder="Skriv en term och tryck Enter..." autocomplete="off">
     </div>
-    <div class="chip-hint">Enter eller komma för att lägga till &nbsp;·&nbsp; × för att ta bort</div>
+    <div class="chip-hint">Tryck <strong>Enter</strong> för att lägga till &nbsp;·&nbsp; klicka × för att ta bort</div>
   </div>
 
   <button class="run-btn" id="runBtn" onclick="start()">Kör sökning</button>
@@ -113,28 +97,54 @@
   });
 
   const chipIn = document.getElementById('chipIn');
+  const chipWrap = document.getElementById('chipWrap');
+
+  chipWrap.addEventListener('click', () => chipIn.focus());
+
   chipIn.addEventListener('keydown', e => {
-    if ((e.key === 'Enter' || e.key === ',') && chipIn.value.trim()) {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      addChip(chipIn.value.trim().replace(/,$/, ''));
-      chipIn.value = '';
+      const val = chipIn.value.trim();
+      if (val) { addChip(val); chipIn.value = ''; }
     }
-    if (e.key === 'Backspace' && !chipIn.value && extras.length) removeChip(extras.at(-1));
+    if (e.key === 'Backspace' && chipIn.value === '' && extras.length > 0) {
+      removeChip(extras[extras.length - 1]);
+    }
   });
 
-  function addChip(t) {
-    if (!t || extras.includes(t)) return;
-    extras.push(t);
+  // Also support comma as separator
+  chipIn.addEventListener('input', e => {
+    if (chipIn.value.endsWith(',')) {
+      const val = chipIn.value.slice(0, -1).trim();
+      if (val) { addChip(val); chipIn.value = ''; }
+    }
+  });
+
+  function addChip(term) {
+    if (!term || extras.includes(term)) return;
+    extras.push(term);
     renderChips();
   }
-  function removeChip(t) { extras = extras.filter(k => k !== t); renderChips(); }
+
+  function removeChip(term) {
+    extras = extras.filter(k => k !== term);
+    renderChips();
+  }
+
   function renderChips() {
-    document.querySelectorAll('.chip').forEach(c => c.remove());
-    extras.forEach(t => {
-      const c = document.createElement('span');
-      c.className = 'chip';
-      c.innerHTML = `${x(t)} <span class="chip-x" onclick="removeChip('${x(t).replace(/'/g,"&apos;")}')">&times;</span>`;
-      document.getElementById('chipWrap').insertBefore(c, chipIn);
+    chipWrap.querySelectorAll('.chip').forEach(c => c.remove());
+    extras.forEach(term => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      const label = document.createTextNode(term + ' ');
+      const btn   = document.createElement('button');
+      btn.className = 'chip-x';
+      btn.textContent = '×';
+      btn.type = 'button';
+      btn.addEventListener('click', (e) => { e.stopPropagation(); removeChip(term); });
+      chip.appendChild(label);
+      chip.appendChild(btn);
+      chipWrap.insertBefore(chip, chipIn);
     });
   }
 
@@ -160,7 +170,6 @@
       const { jobId } = await r.json();
 
       const es = new EventSource('/stream/' + jobId);
-
       es.addEventListener('searching', e => {
         const d = JSON.parse(e.data);
         addLog('Söker: "' + d.keyword + '"' + (d.isExtra ? ' [extra]' : ''), d.isExtra ? 'extra' : 'kw');
@@ -208,7 +217,7 @@
       <div class="stats">
         <div class="stat"><div class="stat-n">${posts.length}</div><div class="stat-l">Inlägg</div></div>
         <div class="stat"><div class="stat-n">${withC}</div><div class="stat-l">Med kommentarer</div></div>
-        <div class="stat"><div class="stat-n">${withA}</div><div class="stat-l">Byrånämnanden</div></div>
+        <div class="stat"><div class="stat-n">${withA}</div><div class="stat-l">Nämnanden</div></div>
       </div>
       <div class="posts">${posts.map((p,i) => card(p,i)).join('')}</div>`;
   }
@@ -218,15 +227,15 @@
     const comments = (p.commentsList||[]).map(c =>
       `<div class="comment"><div class="comment-author">${x(c.author)}</div><div class="comment-text">${x(c.text)}</div></div>`
     ).join('');
-    const longText = p.text.length > 220;
+    const long = p.text.length > 220;
     return `
       <div class="card">
         <div class="card-head">
           <span class="card-author">${x(p.author)}</span>
           <span class="card-kw${p.isExtra?' extra':''}">${x(p.matchedKeyword)}</span>
         </div>
-        <div class="card-text${longText?' collapsed':''}" id="ct${i}">${x(p.text)}</div>
-        ${longText?`<button class="expand-btn" onclick="expand(${i})">Visa mer</button>`:''}
+        <div class="card-text${long?' collapsed':''}" id="ct${i}">${x(p.text)}</div>
+        ${long?`<button class="expand-btn" onclick="expand(${i})">Visa mer</button>`:''}
         <div class="card-meta"><span>👍 ${p.likes}</span><span>💬 ${p.comments}</span><span>🔄 ${p.shares}</span></div>
         ${agencies?`<div class="agencies">${agencies}</div>`:''}
         ${comments?`<button class="toggle-comments" onclick="toggleC(${i})">Visa kommentarer (${p.commentsList.length})</button><div class="comments" id="cm${i}">${comments}</div>`:''}
@@ -238,8 +247,8 @@
     const el = document.getElementById('ct'+i);
     const btn = el.nextElementSibling;
     if (btn && btn.classList.contains('expand-btn')) {
-      const collapsed = el.classList.toggle('collapsed');
-      btn.textContent = collapsed ? 'Visa mer' : 'Visa mindre';
+      el.classList.toggle('collapsed');
+      btn.textContent = el.classList.contains('collapsed') ? 'Visa mer' : 'Visa mindre';
     }
   }
 

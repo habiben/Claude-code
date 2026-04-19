@@ -1,17 +1,26 @@
 const https = require('https');
 
 const BASE_KEYWORDS = [
-  'Guldägget',
-  '100-wattaren',
-  'Månadens kampanj',
-  'svensk reklam',
-  'reklambyrå award'
+  'Jude law',
+  'Legora',
+  'Åkestam Holst',
+  'NoA Åkestam Holst',
+  'Law Just got more attractive',
+  'The new face of law'
 ];
 
 const TRACKED_AGENCIES = [
-  'Forsman & Bodenfors', 'INGO', 'Acne', 'Åkestam Holst',
-  'Familjen', 'Volt', 'Perfect Fools', 'Garbergs',
-  'TBWA', 'DDB', 'McCann', 'Ogilvy'
+  'Åkestam Holst',
+  'NoA Åkestam Holst',
+  'Legora',
+  'Forsman & Bodenfors',
+  'INGO',
+  'Acne',
+  'Familjen',
+  'TBWA',
+  'DDB',
+  'McCann',
+  'Ogilvy'
 ];
 
 const MAX_POSTS    = 10;
@@ -56,29 +65,24 @@ function liGet(urlPath, { liAt, sessionToken }) {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-// Walk the entire response object and extract all activity URNs
 function extractUrnsFromBody(body) {
   const urns = [];
   const ACTIVITY_RE = /(urn:li:(?:activity|ugcPost|share):[0-9]+)/g;
-
   function walk(obj) {
     if (!obj || typeof obj !== 'object') return;
     if (Array.isArray(obj)) { obj.forEach(walk); return; }
     for (const val of Object.values(obj)) {
       if (typeof val === 'string') {
-        // matchAll finds all activity URNs even inside compound URNs like fsd_update:(...)
         for (const m of val.matchAll(ACTIVITY_RE)) urns.push(m[1]);
       } else if (val && typeof val === 'object') {
         walk(val);
       }
     }
   }
-
   walk(body);
   return [...new Set(urns)];
 }
 
-// Working URL format confirmed via /debug endpoint
 function buildSearchUrls(keyword, count) {
   const kw = encodeURIComponent(keyword);
   return [
@@ -91,9 +95,7 @@ async function searchPosts(keyword, creds) {
     try {
       await sleep(400);
       const { status, body } = await liGet(url, creds);
-      if (status === 200 && typeof body === 'object') {
-        return extractUrnsFromBody(body);
-      }
+      if (status === 200 && typeof body === 'object') return extractUrnsFromBody(body);
     } catch { continue; }
   }
   return [];
