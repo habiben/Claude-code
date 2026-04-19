@@ -1,6 +1,7 @@
 const express = require('express');
 const path    = require('path');
 const fs      = require('fs');
+const https   = require('https');
 const { scrapeLinkedIn, BASE_KEYWORDS } = require('./scraper');
 
 const app  = express();
@@ -16,6 +17,58 @@ app.get('/', (_req, res) => {
 
 app.get('/config', (_req, res) => {
   res.json({ baseKeywords: BASE_KEYWORDS });
+});
+
+// Debug endpoint — shows raw LinkedIn API response for a test search
+app.get('/debug', (req, res) => {
+  const liAt       = process.env.LINKEDIN_LI_AT;
+  const jsessionid = process.env.LINKEDIN_JSESSIONID;
+  if (!liAt || !jsessionid) return res.json({ error: 'Cookies saknas' });
+
+  const sessionToken = jsessionid.replace(/^"|"$/g, '');
+  const keyword      = encodeURIComponent(req.query.q || 'reklam');
+
+  const urls = [
+    `/voyager/api/voyagerSearchDashClusters?decorationId=com.linkedin.voyager.dash.deco.search.SearchCluster-2&count=5&q=all&query=(keywords:${keyword},flagshipSearchIntent:SEARCH_SRP,queryParameters:(resultType:List(CONTENT)),includeFiltersInResponse:false)`,
+    `/voyager/api/search/blended?keywords=${keyword}&origin=GLOBAL_SEARCH_HEADER&q=all&start=0&count=5&filters=List(resultType-%3ECONTENT)`,
+    `/voyager/api/search/blended?keywords=${keyword}&q=all&start=0&count=5`,
+  ];
+
+  const results = [];
+  let idx = 0;
+
+  function next() {
+    if (idx >= urls.length) return res.json({ results });
+    const url = urls[idx++];
+    const options = {
+      hostname: 'www.linkedin.com',
+      path: url,
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'application/vnd.linkedin.normalized+json+2.1',
+        'Accept-Language': 'sv-SE,sv;q=0.9,en;q=0.8',
+        'x-li-lang': 'sv_SE',
+        'x-li-track': JSON.stringify({ clientVersion: '1.13.14321', mpVersion: '1.13.14321', osName: 'web', timezoneOffset: 2, timezone: 'Europe/Stockholm', deviceFormFactor: 'DESKTOP', mpName: 'voyager-web' }),
+        'x-restli-protocol-version': '2.0.0',
+        'csrf-token': sessionToken,
+        'Cookie': `li_at=${liAt}; JSESSIONID="${sessionToken}"`
+      },
+      timeout: 15000
+    };
+    const r = https.request(options, (resp) => {
+      let data = '';
+      resp.on('data', c => data += c);
+      resp.on('end', () => {
+        results.push({ url: url.split('?')[0], status: resp.statusCode, preview: data.slice(0, 800) });
+        next();
+      });
+    });
+    r.on('error', err => { results.push({ url, error: err.message }); next(); });
+    r.on('timeout', () => { r.destroy(); results.push({ url, error: 'timeout' }); next(); });
+    r.end();
+  }
+  next();
 });
 
 app.post('/scrape', (req, res) => {
@@ -83,6 +136,5 @@ app.get('/stream/:id', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`LinkedIn Scraper → port ${PORT}`);
-  console.log(`__dirname: ${__dirname}`);
   console.log(`index.html finns: ${fs.existsSync(path.join(__dirname, 'index.html'))}`);
 });
