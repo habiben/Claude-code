@@ -1,0 +1,13 @@
+{
+  "name": "linkedin-scraper",
+  "version": "1.0.0",
+  "description": "LinkedIn scraper for Swedish ad industry posts and comments",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
