@@ -380,40 +380,77 @@ function parseByratoppen(html) {
 // Parse a category page for top list and deadline
 function parseCategoryTopList(html, categoryName) {
   const results = [];
-  const text = stripHtml(html);
+  let text = stripHtml(html);
 
-  // Look for ranked entries: "1. Agency Name" or "Agency Name – Winner"
-  const patterns = [
-    /(\d+)\.\s*([A-ZÅÄÖa-zåäö][^\d\n]{2,50})/g,
-    /(?:Vinnare|1:a|2:a|3:a|Winner|First|Second|Third)[:\s]+([A-ZÅÄÖa-zåäö][^\n]{2,50})/gi
-  ];
+  // Remove the Byråtoppen sidebar section (shared across all pages)
+  // It appears as "byråtoppen ... 1. Agency 327 poäng ... se hela listan"
+  text = text.replace(/byråtoppen\s+\d{4}\s*[–\-]\s*alla\s+kategorier[\s\S]*?se\s+hela\s+listan/gi, '');
 
-  for (const pattern of patterns) {
-    let match;
-    while ((match = pattern.exec(text)) !== null) {
-      const rank = match[1] ? parseInt(match[1]) : results.length + 1;
-      const agency = (match[2] || match[1]).trim()
-        .replace(/\s*[-–].*$/, '') // Remove trailing description
-        .replace(/\s*\d+\s*(?:p|poäng).*$/, ''); // Remove points
-      if (agency.length > 2 && agency.length < 60) {
-        results.push({ rank, agency });
+  // Remove copyright footer section
+  text = text.replace(/org\.\s*nr\s*\d[\s\S]*$/gi, '');
+  text = text.replace(/upphovsrättslagen[\s\S]*$/gi, '');
+  text = text.replace(/personuppgiftspolicy[\s\S]*$/gi, '');
+
+  // Remove common sidebar/footer text that appears on all resume.se pages
+  text = text.replace(/populära\s+ämnen[\s\S]*$/gi, '');
+  text = text.replace(/kundservice[\s\S]*$/gi, '');
+
+  // Strategy 1: Look for category-specific ranked entries "1. Agency Name"
+  // Only accept entries with rank <= 20 and no "poäng" (which indicates Byråtoppen)
+  const rankedPattern = /(\d+)\.\s*([A-ZÅÄÖa-zåäö][^\d\n]{2,50})/g;
+  let match;
+  while ((match = rankedPattern.exec(text)) !== null) {
+    const rank = parseInt(match[1]);
+    if (rank > 20) continue;
+    const agency = match[2].trim()
+      .replace(/\s*[-–].*$/, '')
+      .replace(/\s*\d+\s*(?:p|poäng).*$/, '');
+    if (agency.length > 2 && agency.length < 60 &&
+        !/poäng|upphovsrätt|innehåll|resume\.se|skyddas|bonnier/i.test(agency)) {
+      results.push({ rank, agency });
+    }
+  }
+
+  // Strategy 2: If no ranked entries, look for winner mentions in article headlines
+  // Pattern: "Agency vinner månadens film/idé/etc."
+  if (results.length === 0) {
+    const catNameLower = categoryName.toLowerCase().replace(/^månadens\s*/i, '');
+    const winnerPatterns = [
+      new RegExp(`([A-ZÅÄÖa-zåäö][A-ZÅÄÖa-zåäö\\s&,.'·\\-\\/()]+?)\\s+vinner\\s+månadens\\s+${catNameLower}`, 'gi'),
+      new RegExp(`månadens\\s+${catNameLower}[:\\s]+([A-ZÅÄÖa-zåäö][A-ZÅÄÖa-zåäö\\s&,.'·\\-\\/()]+?)\\s+(?:tar|vinner|får)`, 'gi'),
+    ];
+
+    const winners = [];
+    for (const pattern of winnerPatterns) {
+      while ((match = pattern.exec(text)) !== null) {
+        const agency = match[1].trim().replace(/\s+/g, ' ');
+        if (agency.length > 2 && agency.length < 60 &&
+            !/upphovsrätt|innehåll|resume|skyddas|bonnier|skrivet|artikel/i.test(agency)) {
+          winners.push(agency);
+        }
       }
     }
-    if (results.length > 0) break;
+    // Deduplicate and rank by occurrence order
+    const seen = new Set();
+    winners.forEach((agency, i) => {
+      const key = agency.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        results.push({ rank: results.length + 1, agency });
+      }
+    });
   }
 
   // Extract deadline date from the page
   let deadline = null;
   let deadlineDisplay = null;
 
-  // Swedish month names for parsing
   const svMonths = {
     'januari': '01', 'februari': '02', 'mars': '03', 'april': '04',
     'maj': '05', 'juni': '06', 'juli': '07', 'augusti': '08',
     'september': '09', 'oktober': '10', 'november': '11', 'december': '12'
   };
 
-  // Pattern: "deadline", "sista dag", "skicka in", "bidrag senast" near a date
   const deadlinePatterns = [
     /(?:deadline|sista\s*dag|skicka\s*in|bidrag\s*senast|sista\s*inlämning)[:\s]*(\d{1,2})\s+(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)\s*(\d{4})?/gi,
     /(\d{1,2})\s+(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)\s*(\d{4})?/gi,
@@ -421,19 +458,19 @@ function parseCategoryTopList(html, categoryName) {
   ];
 
   for (const pattern of deadlinePatterns) {
-    const match = pattern.exec(text);
-    if (match) {
-      if (match[0].includes('-') && match[0].length === 10) {
-        deadline = match[0];
-        deadlineDisplay = match[0];
+    const deadlineMatch = pattern.exec(text);
+    if (deadlineMatch) {
+      if (deadlineMatch[0].includes('-') && deadlineMatch[0].length === 10) {
+        deadline = deadlineMatch[0];
+        deadlineDisplay = deadlineMatch[0];
       } else {
-        const day = match[1].padStart(2, '0');
-        const monthName = match[2].toLowerCase();
+        const day = deadlineMatch[1].padStart(2, '0');
+        const monthName = deadlineMatch[2].toLowerCase();
         const month = svMonths[monthName];
-        const year = match[3] || new Date().getFullYear().toString();
+        const year = deadlineMatch[3] || new Date().getFullYear().toString();
         if (month) {
           deadline = `${year}-${month}-${day}`;
-          deadlineDisplay = `${match[1]} ${match[2]} ${year}`;
+          deadlineDisplay = `${deadlineMatch[1]} ${deadlineMatch[2]} ${year}`;
         }
       }
       break;
