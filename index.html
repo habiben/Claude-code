@@ -762,6 +762,7 @@
     }
 
     function getDeadlineStatus(dateStr) {
+      if (!dateStr) return { passed: false, daysUntil: Infinity, urgency: 'ok', label: 'TBA' };
       const d = parseDate(dateStr);
       const diff = daysBetween(today, d);
       if (diff < 0) return { passed: true, daysUntil: diff, urgency: 'passed', label: 'Passed' };
