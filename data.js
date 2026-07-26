@@ -344,43 +344,43 @@ window.MANADENS_DATA = {
       id: "film",
       name: "Månadens Film",
       description: "Bästa reklamfilm – TV, online, sociala medier",
-      deadlineInfo: "Löpande, månatlig bedömning",
-      nextDeadline: "2026-04-30"
+      deadlineInfo: "Juni–augusti-omgången",
+      nextDeadline: "2026-08-31"
     },
     {
       id: "hantverk",
       name: "Månadens Hantverk",
       description: "Bästa hantverk – craft, produktion, utförande",
-      deadlineInfo: "Löpande, månatlig bedömning",
-      nextDeadline: "2026-04-30"
+      deadlineInfo: "Maj–augusti-omgången",
+      nextDeadline: "2026-08-31"
     },
     {
       id: "ide",
       name: "Månadens Idé",
       description: "Bästa kreativa idé – oavsett kanal eller format",
-      deadlineInfo: "Löpande, månatlig bedömning",
-      nextDeadline: "2026-04-30"
+      deadlineInfo: "Juni–augusti-omgången",
+      nextDeadline: "2026-08-31"
     },
     {
       id: "politik",
       name: "Månadens Politik",
       description: "Bästa politiska kampanj eller samhällskommunikation",
-      deadlineInfo: "Löpande, månatlig bedömning",
-      nextDeadline: "2026-04-30"
+      deadlineInfo: "Datum ej angivet",
+      nextDeadline: ""
     },
     {
       id: "print",
       name: "Månadens Print",
       description: "Bästa tryckta annons – tidningar, magasin",
-      deadlineInfo: "Löpande, månatlig bedömning",
-      nextDeadline: "2026-04-30"
+      deadlineInfo: "Maj–augusti-omgången",
+      nextDeadline: "2026-08-31"
     },
     {
       id: "utomhus",
       name: "Månadens Utomhus",
       description: "Bästa utomhusreklam – affischer, DOOH, installationer",
-      deadlineInfo: "Löpande, månatlig bedömning",
-      nextDeadline: "2026-04-30"
+      deadlineInfo: "Maj–augusti-omgången",
+      nextDeadline: "2026-08-31"
     }
   ],
   pointsSystem: {
