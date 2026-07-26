@@ -462,9 +462,11 @@ function parseTavlingsschema(html) {
 }
 
 // Given parsed rounds, find the next upcoming deadline for each category
+// Also finds the most recently completed round (whose winners are currently shown)
 function getNextDeadlines(rounds) {
   const today = new Date().toISOString().split('T')[0];
   const categoryMap = {};
+  const prevRoundMap = {};
 
   // Category name normalization
   const normalize = (name) => {
@@ -477,19 +479,26 @@ function getNextDeadlines(rounds) {
   const sorted = [...rounds].sort((a, b) => a.deadline.localeCompare(b.deadline));
 
   for (const round of sorted) {
-    if (round.deadline < today) continue;
     for (const cat of round.categories) {
       const id = normalize(cat);
-      if (!categoryMap[id]) {
+      if (round.deadline < today) {
+        prevRoundMap[id] = formatRoundName(round.name);
+      } else if (!categoryMap[id]) {
         categoryMap[id] = {
           deadline: round.deadline,
-          deadlineInfo: round.name + '-omgången'
+          deadlineInfo: round.name + '-omgången',
+          winnerRound: prevRoundMap[id] || ''
         };
       }
     }
   }
 
   return categoryMap;
+}
+
+function formatRoundName(name) {
+  const parts = name.split(/[-–]/).map(p => p.trim());
+  return parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' - ');
 }
 
 async function scrapeManadens() {
@@ -732,7 +741,13 @@ function updateDataJs(manadensResult) {
       if (deadlineRegex.test(content)) {
         content = content.replace(deadlineRegex, `$1${info.deadlineInfo}$3`);
         content = content.replace(nextDeadlineRegex, `$1${info.deadline}$3`);
-        console.log(`    ${catId}: ${info.deadline} (${info.deadlineInfo})`);
+        const winnerRoundRegex = new RegExp(
+          `(id:\\s*"${catId}"[\\s\\S]*?winnerRound:\\s*")([^"]*)(")`,
+        );
+        if (winnerRoundRegex.test(content)) {
+          content = content.replace(winnerRoundRegex, `$1${info.winnerRound || ''}$3`);
+        }
+        console.log(`    ${catId}: ${info.deadline} (${info.deadlineInfo})${info.winnerRound ? ` winners from: ${info.winnerRound}` : ''}`);
       }
     }
   } else if (manadensResult.categoryTopLists && manadensResult.categoryTopLists.length > 0) {

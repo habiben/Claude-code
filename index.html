@@ -562,6 +562,11 @@
       align-items: center;
       gap: 0.4rem;
     }
+    .cat-round {
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
     .cat-leaderboard-empty {
       padding: 1rem;
       color: var(--text-dim);
@@ -1079,7 +1084,7 @@
           : `<div class="cat-leaderboard-empty">Uppdateras vid nästa scraping</div>`;
         return `
           <div class="cat-leaderboard">
-            <div class="cat-leaderboard-header">${escapeHtml(cat.name)}</div>
+            <div class="cat-leaderboard-header">${escapeHtml(cat.name)}${cat.winnerRound ? ` <span class="cat-round">(${escapeHtml(cat.winnerRound)})</span>` : ''}</div>
             ${list}
           </div>`;
       }).join('');
