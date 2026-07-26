@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ÅHwards — Ad Awards Deadline Tracker</title>
+  <title>ÅHwards — Deadlines för reklamtävlingar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -631,20 +631,20 @@
     <h1 class="site-title">ÅH<span class="wards">wards</span></h1>
     <p>Deadlines, avgifter & resurser för världens största reklamtävlingar</p>
     <div class="header-actions">
-      <button class="btn btn-primary" id="downloadAll" title="Download all deadlines as a calendar file">
+      <button class="btn btn-primary" id="downloadAll" title="Ladda ner alla deadlines som kalenderfil">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download All Deadlines (.ics)
+        Ladda ner alla deadlines (.ics)
       </button>
-      <button class="btn btn-outline" id="downloadUpcoming" title="Download only upcoming deadlines">
+      <button class="btn btn-outline" id="downloadUpcoming" title="Ladda ner kommande deadlines">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Upcoming Only (.ics)
+        Bara kommande (.ics)
       </button>
     </div>
   </header>
 
   <!-- TAB NAVIGATION -->
   <div class="tab-nav">
-    <button class="tab-btn active" data-tab="awards">Awards Tracker</button>
+    <button class="tab-btn active" data-tab="awards">Tävlingar</button>
     <button class="tab-btn" data-tab="manadens">Månadens</button>
   </div>
 
@@ -656,14 +656,14 @@
     <div class="filters-inner">
       <div class="search-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="searchInput" placeholder="Search awards...">
+        <input type="text" id="searchInput" placeholder="Sök tävlingar...">
       </div>
       <select class="filter-select" id="sortSelect">
-        <option value="next-deadline">Next Deadline (soonest)</option>
-        <option value="name-az">Name A–Z</option>
-        <option value="name-za">Name Z–A</option>
+        <option value="next-deadline">Nästa deadline (snarast)</option>
+        <option value="name-az">Namn A–Ö</option>
+        <option value="name-za">Namn Ö–A</option>
       </select>
-      <button class="toggle-btn" id="toggleUpcoming">Upcoming Only</button>
+      <button class="toggle-btn" id="toggleUpcoming">Bara kommande</button>
     </div>
   </nav>
 
@@ -718,7 +718,7 @@
 
   <!-- FOOTER -->
   <footer class="site-footer">
-    <p>Data last updated: March 2026. Always verify dates on official award websites before submitting.</p>
+    <p>Senast uppdaterad: mars 2026. Kontrollera alltid datum på tävlingarnas officiella hemsidor innan du skickar in.</p>
   </footer>
 
   <!-- ICONS (hidden SVG sprite) -->
@@ -764,11 +764,11 @@
     function getDeadlineStatus(dateStr) {
       const d = parseDate(dateStr);
       const diff = daysBetween(today, d);
-      if (diff < 0) return { passed: true, daysUntil: diff, urgency: 'passed', label: 'Passed' };
-      if (diff === 0) return { passed: false, daysUntil: 0, urgency: 'urgent', label: 'Today!' };
-      if (diff <= 7) return { passed: false, daysUntil: diff, urgency: 'urgent', label: `${diff}d left` };
-      if (diff <= 30) return { passed: false, daysUntil: diff, urgency: 'warning', label: `${diff} days` };
-      return { passed: false, daysUntil: diff, urgency: 'ok', label: `${diff} days` };
+      if (diff < 0) return { passed: true, daysUntil: diff, urgency: 'passed', label: 'Passerad' };
+      if (diff === 0) return { passed: false, daysUntil: 0, urgency: 'urgent', label: 'Idag!' };
+      if (diff <= 7) return { passed: false, daysUntil: diff, urgency: 'urgent', label: `${diff}d kvar` };
+      if (diff <= 30) return { passed: false, daysUntil: diff, urgency: 'warning', label: `${diff} dagar` };
+      return { passed: false, daysUntil: diff, urgency: 'ok', label: `${diff} dagar` };
     }
 
     function getNextDeadline(award) {
@@ -828,7 +828,7 @@
               <div class="card-title">${escapeHtml(award.name)}</div>
               <div class="card-org">${escapeHtml(award.organization)}</div>
             </div>
-            <a href="${escapeHtml(award.website)}" target="_blank" rel="noopener" class="card-link" title="Visit official site">
+            <a href="${escapeHtml(award.website)}" target="_blank" rel="noopener" class="card-link" title="Besök officiell hemsida">
               <svg><use href="#icon-external"/></svg>
             </a>
           </div>
@@ -841,17 +841,17 @@
             ${deadlinesHtml}
           </div>
           <div class="card-section">
-            <div class="section-label">Entry Fees</div>
+            <div class="section-label">Avgifter</div>
             <div class="fee-grid">${feesHtml}</div>
           </div>
           <div class="card-section">
-            <div class="section-label">Resources</div>
+            <div class="section-label">Resurser</div>
             <div class="resource-links">${resourcesHtml}</div>
           </div>
           <div class="card-footer">
-            <button class="btn btn-outline btn-sm" onclick="downloadSingle('${award.id}')" title="Download calendar for ${escapeHtml(award.name)}">
+            <button class="btn btn-outline btn-sm" onclick="downloadSingle('${award.id}')" title="Ladda ner kalender för ${escapeHtml(award.name)}">
               <svg><use href="#icon-calendar"/></svg>
-              Add to Calendar
+              Lägg till i kalender
             </button>
           </div>
         </article>`;
@@ -860,7 +860,7 @@
     function renderAwards(awards) {
       const grid = document.getElementById('awardsGrid');
       if (awards.length === 0) {
-        grid.innerHTML = '<div class="no-results"><p>No awards match your search.</p></div>';
+        grid.innerHTML = '<div class="no-results"><p>Inga tävlingar matchar din sökning.</p></div>';
         return;
       }
       grid.innerHTML = awards.map((a, i) => renderCard(a, i)).join('');
@@ -938,10 +938,10 @@
           events += `DTSTART;VALUE=DATE:${formatICSDate(dl.date)}\r\n`;
           events += `DTEND;VALUE=DATE:${addOneDay(dl.date)}\r\n`;
           events += `SUMMARY:${icsEscape(award.name)} — ${icsEscape(dl.label)}\r\n`;
-          events += `DESCRIPTION:${icsEscape(dl.label + ' deadline for ' + award.name + ' ' + award.year + '.\\n' + feeNote + '\\nMore info: ' + award.website)}\r\n`;
+          events += `DESCRIPTION:${icsEscape(dl.label + ' deadline för ' + award.name + ' ' + award.year + '.\\n' + feeNote + '\\nMer info: ' + award.website)}\r\n`;
           events += `URL:${award.website}\r\n`;
-          events += `BEGIN:VALARM\r\nTRIGGER:-P7D\r\nACTION:DISPLAY\r\nDESCRIPTION:${icsEscape(award.name + ' ' + dl.label + ' in 7 days')}\r\nEND:VALARM\r\n`;
-          events += `BEGIN:VALARM\r\nTRIGGER:-P1D\r\nACTION:DISPLAY\r\nDESCRIPTION:${icsEscape(award.name + ' ' + dl.label + ' TOMORROW')}\r\nEND:VALARM\r\n`;
+          events += `BEGIN:VALARM\r\nTRIGGER:-P7D\r\nACTION:DISPLAY\r\nDESCRIPTION:${icsEscape(award.name + ' ' + dl.label + ' om 7 dagar')}\r\nEND:VALARM\r\n`;
+          events += `BEGIN:VALARM\r\nTRIGGER:-P1D\r\nACTION:DISPLAY\r\nDESCRIPTION:${icsEscape(award.name + ' ' + dl.label + ' IMORGON')}\r\nEND:VALARM\r\n`;
           events += `END:VEVENT\r\n`;
         }
       }
