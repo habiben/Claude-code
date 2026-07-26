@@ -346,6 +346,7 @@ window.MANADENS_DATA = {
       description: "Bästa reklamfilm – TV, online, sociala medier",
       deadlineInfo: "juni-augusti-omgången",
       nextDeadline: "2026-08-31",
+      winnerRound: "Maj",
       topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Volvo Cars" }, { rank: 3, agency: "First Lady Agency" }]
     },
     {
@@ -354,6 +355,7 @@ window.MANADENS_DATA = {
       description: "Bästa hantverk – craft, produktion, utförande",
       deadlineInfo: "maj-augusti-omgången",
       nextDeadline: "2026-08-31",
+      winnerRound: "Februari - April",
       topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Kontiki/Rio Pictures" }, { rank: 3, agency: "Forsman & Bodenfors" }]
     },
     {
@@ -362,6 +364,7 @@ window.MANADENS_DATA = {
       description: "Bästa kreativa idé – oavsett kanal eller format",
       deadlineInfo: "juni-augusti-omgången",
       nextDeadline: "2026-08-31",
+      winnerRound: "Maj",
       topList: [{ rank: 1, agency: "Forsman & Bodenfors" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Kid Collective" }]
     },
     {
@@ -370,6 +373,7 @@ window.MANADENS_DATA = {
       description: "Bästa politiska kampanj eller samhällskommunikation",
       deadlineInfo: "Datum ej angivet",
       nextDeadline: "",
+      winnerRound: "",
       topList: [{ rank: 1, agency: "Sosselinjen" }, { rank: 2, agency: "Stoppa hyreschocken" }, { rank: 3, agency: "En enig lokalpolitik i Göteborg" }]
     },
     {
@@ -378,6 +382,7 @@ window.MANADENS_DATA = {
       description: "Bästa tryckta annons – tidningar, magasin",
       deadlineInfo: "maj-augusti-omgången",
       nextDeadline: "2026-08-31",
+      winnerRound: "Februari - April",
       topList: [{ rank: 1, agency: "Knak Agency" }, { rank: 2, agency: "Differ Agency" }, { rank: 3, agency: "Åkestam Holst" }]
     },
     {
@@ -386,6 +391,7 @@ window.MANADENS_DATA = {
       description: "Bästa utomhusreklam – affischer, DOOH, installationer",
       deadlineInfo: "maj-augusti-omgången",
       nextDeadline: "2026-08-31",
+      winnerRound: "Februari - April",
       topList: [{ rank: 1, agency: "Save Our Souls" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Forsman & Bodenfors" }]
     }
   ],
