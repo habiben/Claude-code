@@ -412,6 +412,77 @@ function parseCategoryTopList(html, categoryName) {
   return { category: categoryName, topList: results.slice(0, 10), deadline, deadlineDisplay };
 }
 
+// Parse the tävlingsschema (competition schedule) from the main page
+// Returns an array of rounds: { name, deadline, categories[] }
+function parseTavlingsschema(html) {
+  const text = stripHtml(html);
+  const rounds = [];
+
+  const svMonths = {
+    'januari': '01', 'februari': '02', 'mars': '03', 'april': '04',
+    'maj': '05', 'juni': '06', 'juli': '07', 'augusti': '08',
+    'september': '09', 'oktober': '10', 'november': '11', 'december': '12'
+  };
+
+  // Match patterns like "Tävlingsomgång X ... Deadline: DD month ... Aktuell kategori: ..."
+  const roundPattern = /Tävlingsomgång\s+([\w\-–åäöÅÄÖ]+(?:\s*[-–]\s*[\w]+)?)\s+.*?Deadline[:\s]*(\d{1,2})\s+(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)(?:\s+(\d{4}))?\s+.*?Aktuell kategori[:\s]*([^T]*?)(?=Tävlingsomgång|$)/gi;
+
+  let match;
+  while ((match = roundPattern.exec(text)) !== null) {
+    const roundName = match[1].trim();
+    const day = match[2].padStart(2, '0');
+    const monthName = match[3].toLowerCase();
+    const month = svMonths[monthName];
+    const year = match[4] || new Date().getFullYear().toString();
+    const deadline = month ? `${year}-${month}-${day}` : null;
+
+    const categoryStr = match[5].trim();
+    const categories = categoryStr.split(/[,]+/).map(c => c.trim().toLowerCase()).filter(c => c.length > 0);
+
+    if (deadline) {
+      rounds.push({
+        name: roundName,
+        deadline,
+        deadlineDisplay: `${match[2]} ${match[3]} ${year}`,
+        categories
+      });
+    }
+  }
+
+  return rounds;
+}
+
+// Given parsed rounds, find the next upcoming deadline for each category
+function getNextDeadlines(rounds) {
+  const today = new Date().toISOString().split('T')[0];
+  const categoryMap = {};
+
+  // Category name normalization
+  const normalize = (name) => {
+    const map = { 'idé': 'ide', 'ide': 'ide', 'film': 'film', 'hantverk': 'hantverk',
+                  'print': 'print', 'utomhus': 'utomhus', 'politik': 'politik' };
+    return map[name.toLowerCase()] || name.toLowerCase();
+  };
+
+  // Sort rounds by deadline ascending
+  const sorted = [...rounds].sort((a, b) => a.deadline.localeCompare(b.deadline));
+
+  for (const round of sorted) {
+    if (round.deadline < today) continue;
+    for (const cat of round.categories) {
+      const id = normalize(cat);
+      if (!categoryMap[id]) {
+        categoryMap[id] = {
+          deadline: round.deadline,
+          deadlineInfo: round.name + '-omgången'
+        };
+      }
+    }
+  }
+
+  return categoryMap;
+}
+
 async function scrapeManadens() {
   console.log();
   console.log('='.repeat(70));
@@ -422,11 +493,13 @@ async function scrapeManadens() {
     scraped: new Date().toISOString(),
     byratoppen: [],
     categoryTopLists: [],
+    schedule: [],
+    nextDeadlines: {},
     errors: []
   };
 
-  // 1. Scrape Byråtoppen (main leaderboard)
-  process.stdout.write('\n  Fetching Byråtoppen...');
+  // 1. Scrape Byråtoppen (main leaderboard) + Tävlingsschema
+  process.stdout.write('\n  Fetching Byråtoppen & Tävlingsschema...');
   try {
     const { status, body } = await fetchPage(MANADENS_PAGES.byratoppen);
     if (status === 200) {
@@ -441,6 +514,18 @@ async function scrapeManadens() {
       } else {
         console.log('  WARNING: Could not parse leaderboard. Page may require auth or structure changed.');
         console.log('  Raw text preview:', stripHtml(body).substring(0, 500));
+      }
+
+      // Parse tävlingsschema from the same page
+      result.schedule = parseTavlingsschema(body);
+      result.nextDeadlines = getNextDeadlines(result.schedule);
+      if (result.schedule.length > 0) {
+        console.log(`\n  Tävlingsschema: ${result.schedule.length} rounds found`);
+        for (const [catId, info] of Object.entries(result.nextDeadlines)) {
+          console.log(`    ${catId.padEnd(12)} next deadline: ${info.deadline} (${info.deadlineInfo})`);
+        }
+      } else {
+        console.log('\n  WARNING: Could not parse tävlingsschema from page.');
       }
     } else {
       console.log(` HTTP ${status}`);
@@ -529,8 +614,24 @@ function updateDataJs(manadensResult) {
     return false;
   }
 
-  // Update category deadlines from scraped data
-  if (manadensResult.categoryTopLists && manadensResult.categoryTopLists.length > 0) {
+  // Update category deadlines from tävlingsschema
+  if (manadensResult.nextDeadlines && Object.keys(manadensResult.nextDeadlines).length > 0) {
+    console.log('\n  Updating category deadlines from tävlingsschema:');
+    for (const [catId, info] of Object.entries(manadensResult.nextDeadlines)) {
+      const deadlineRegex = new RegExp(
+        `(id:\\s*"${catId}"[\\s\\S]*?deadlineInfo:\\s*")([^"]*)(")`,
+      );
+      const nextDeadlineRegex = new RegExp(
+        `(id:\\s*"${catId}"[\\s\\S]*?nextDeadline:\\s*")([^"]*)(")`,
+      );
+      if (deadlineRegex.test(content)) {
+        content = content.replace(deadlineRegex, `$1${info.deadlineInfo}$3`);
+        content = content.replace(nextDeadlineRegex, `$1${info.deadline}$3`);
+        console.log(`    ${catId}: ${info.deadline} (${info.deadlineInfo})`);
+      }
+    }
+  } else if (manadensResult.categoryTopLists && manadensResult.categoryTopLists.length > 0) {
+    // Fallback: use deadlines from individual category pages
     for (const cat of manadensResult.categoryTopLists) {
       if (cat.deadline) {
         const deadlineRegex = new RegExp(
