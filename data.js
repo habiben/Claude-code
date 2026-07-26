@@ -248,6 +248,32 @@ window.AWARDS_DATA = [
     ]
   },
   {
+    id: "eurobest",
+    name: "Eurobest",
+    organization: "Lions Festivals",
+    color: "#E74C3C",
+    website: "https://www.eurobest.com/",
+    year: 2026,
+    location: "Europe",
+    eventDates: "November–December 2026",
+    deadlines: [
+      { label: "Entries Open", date: "2026-08-13", displayDate: "August 13, 2026" },
+      { label: "Standard Rate Ends", date: "2026-09-18", displayDate: "September 18, 2026" },
+      { label: "2nd Late Fee", date: "2026-10-02", displayDate: "October 2, 2026" },
+      { label: "Final Deadline", date: "2026-10-16", displayDate: "October 16, 2026" }
+    ],
+    fees: [
+      { tier: "Standard", amount: "See eurobest.com", note: "Before Sep 18" },
+      { tier: "1st Late Fee", amount: "+surcharge", note: "After Sep 18" },
+      { tier: "2nd Late Fee", amount: "+surcharge", note: "After Oct 2" }
+    ],
+    resources: [
+      { label: "Dates & Fees", url: "https://www.eurobest.com/support/dates-and-fees", type: "entryguide" },
+      { label: "Entry Guide", url: "https://www.eurobest.com/support/eurobest-awards-entry-guide", type: "entryguide" },
+      { label: "Help Entering", url: "https://www.eurobest.com/support/help-entering", type: "faq" }
+    ]
+  },
+  {
     id: "guldagget",
     name: "Guldägget",
     organization: "Komm (Sveriges Kommunikationsbyråer)",
