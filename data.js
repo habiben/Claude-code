@@ -354,7 +354,7 @@ window.MANADENS_DATA = {
       description: "Bästa hantverk – craft, produktion, utförande",
       deadlineInfo: "maj-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
+      topList: []
     },
     {
       id: "ide",
@@ -362,7 +362,7 @@ window.MANADENS_DATA = {
       description: "Bästa kreativa idé – oavsett kanal eller format",
       deadlineInfo: "juni-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
+      topList: []
     },
     {
       id: "politik",
@@ -370,7 +370,7 @@ window.MANADENS_DATA = {
       description: "Bästa politiska kampanj eller samhällskommunikation",
       deadlineInfo: "Datum ej angivet",
       nextDeadline: "",
-      topList: [{ rank: 1, agency: "Redan klassisk S-kampanj" }]
+      topList: []
     },
     {
       id: "print",
@@ -378,7 +378,7 @@ window.MANADENS_DATA = {
       description: "Bästa tryckta annons – tidningar, magasin",
       deadlineInfo: "maj-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
+      topList: []
     },
     {
       id: "utomhus",
@@ -386,7 +386,7 @@ window.MANADENS_DATA = {
       description: "Bästa utomhusreklam – affischer, DOOH, installationer",
       deadlineInfo: "maj-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
+      topList: []
     }
   ],
   pointsSystem: {

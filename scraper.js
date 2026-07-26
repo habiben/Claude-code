@@ -412,33 +412,23 @@ function parseCategoryTopList(html, categoryName) {
   }
 
   // Strategy 2: If no ranked entries, look for winner mentions in article headlines
-  // Pattern: "Agency vinner månadens film/idé/etc."
+  // Only match "Agency vinner månadens Category" — the most reliable pattern
   if (results.length === 0) {
     const catNameLower = categoryName.toLowerCase().replace(/^månadens\s*/i, '');
-    const winnerPatterns = [
-      new RegExp(`([A-ZÅÄÖa-zåäö][A-ZÅÄÖa-zåäö\\s&,.'·\\-\\/()]+?)\\s+vinner\\s+månadens\\s+${catNameLower}`, 'gi'),
-      new RegExp(`månadens\\s+${catNameLower}[:\\s]+([A-ZÅÄÖa-zåäö][A-ZÅÄÖa-zåäö\\s&,.'·\\-\\/()]+?)\\s+(?:tar|vinner|får)`, 'gi'),
-    ];
+    const winnerPattern = new RegExp(
+      `([A-ZÅÄÖa-zåäö][A-ZÅÄÖa-zåäö\\s&,.'·\\-\\/()]+?)\\s+vinner\\s+månadens\\s+${catNameLower}`, 'gi'
+    );
 
-    const winners = [];
-    for (const pattern of winnerPatterns) {
-      while ((match = pattern.exec(text)) !== null) {
-        const agency = match[1].trim().replace(/\s+/g, ' ');
-        if (agency.length > 2 && agency.length < 60 &&
-            !/upphovsrätt|innehåll|resume|skyddas|bonnier|skrivet|artikel/i.test(agency)) {
-          winners.push(agency);
-        }
-      }
-    }
-    // Deduplicate and rank by occurrence order
     const seen = new Set();
-    winners.forEach((agency, i) => {
+    while ((match = winnerPattern.exec(text)) !== null) {
+      const agency = match[1].trim().replace(/\s+/g, ' ');
       const key = agency.toLowerCase();
-      if (!seen.has(key)) {
+      if (agency.length > 2 && agency.length < 40 && !seen.has(key) &&
+          !/upphovsrätt|innehåll|resume|skyddas|bonnier|skrivet|artikel|kampanj|klassisk/i.test(agency)) {
         seen.add(key);
         results.push({ rank: results.length + 1, agency });
       }
-    });
+    }
   }
 
   // Extract deadline date from the page
@@ -791,18 +781,20 @@ function updateDataJs(manadensResult) {
   if (manadensResult.categoryTopLists && manadensResult.categoryTopLists.length > 0) {
     console.log('\n  Updating category top lists:');
     for (const cat of manadensResult.categoryTopLists) {
-      if (cat.topList && cat.topList.length > 0) {
-        const entries = cat.topList.map(e => {
-          const agency = e.agency.replace(/"/g, '\\"');
-          return `{ rank: ${e.rank}, agency: "${agency}" }`;
-        });
-        const newTopList = `[${entries.join(', ')}]`;
-        const topListRegex = new RegExp(
-          `(id:\\s*"${cat.id}"[\\s\\S]*?topList:\\s*)\\[[^\\]]*\\]`
-        );
-        if (topListRegex.test(content)) {
-          content = content.replace(topListRegex, `$1${newTopList}`);
+      const topListRegex = new RegExp(
+        `(id:\\s*"${cat.id}"[\\s\\S]*?topList:\\s*)\\[[^\\]]*\\]`
+      );
+      if (topListRegex.test(content)) {
+        if (cat.topList && cat.topList.length > 0) {
+          const entries = cat.topList.map(e => {
+            const agency = e.agency.replace(/"/g, '\\"');
+            return `{ rank: ${e.rank}, agency: "${agency}" }`;
+          });
+          content = content.replace(topListRegex, `$1[${entries.join(', ')}]`);
           console.log(`    ${cat.id}: ${cat.topList.length} entries`);
+        } else {
+          content = content.replace(topListRegex, `$1[]`);
+          console.log(`    ${cat.id}: cleared (0 entries found)`);
         }
       }
     }
