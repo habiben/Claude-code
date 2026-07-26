@@ -119,13 +119,14 @@ const SOURCES = [
 
 const MANADENS_PAGES = {
   byratoppen: 'https://www.resume.se/manadens-kampanj/',
+  helaListan: 'https://www.resume.se/marknadsforing/tavling/byratoppen-2026-hela-listan/',
   categories: [
-    { id: 'film',      name: 'Månadens Film',      url: 'https://www.resume.se/manadens-kampanj/film/' },
-    { id: 'hantverk',  name: 'Månadens Hantverk',  url: 'https://www.resume.se/manadens-kampanj/hantverk/' },
-    { id: 'ide',       name: 'Månadens Idé',       url: 'https://www.resume.se/manadens-kampanj/ide/' },
-    { id: 'politik',   name: 'Månadens Politik',   url: 'https://www.resume.se/manadens-kampanj/politik/' },
-    { id: 'print',     name: 'Månadens Print',     url: 'https://www.resume.se/manadens-kampanj/print/' },
-    { id: 'utomhus',   name: 'Månadens Utomhus',   url: 'https://www.resume.se/manadens-kampanj/utomhus/' }
+    { id: 'film',      name: 'Månadens Film',      url: 'https://www.resume.se/manadens-kampanj/manadens-kampanj-film/' },
+    { id: 'hantverk',  name: 'Månadens Hantverk',  url: 'https://www.resume.se/manadens-kampanj/manadens-kampanj-hantverk/' },
+    { id: 'ide',       name: 'Månadens Idé',       url: 'https://www.resume.se/manadens-kampanj/manadens-kampanj-ide/' },
+    { id: 'politik',   name: 'Månadens Politik',   url: 'https://www.resume.se/manadens-kampanj/manadens-kampanj-politik/' },
+    { id: 'print',     name: 'Månadens Print',     url: 'https://www.resume.se/manadens-kampanj/manadens-kampanj-print/' },
+    { id: 'utomhus',   name: 'Månadens Utomhus',   url: 'https://www.resume.se/manadens-kampanj/manadens-kampanj-utomhus/' }
   ]
 };
 
@@ -178,6 +179,20 @@ function stripHtml(html) {
     .replace(/&#\d+;/g, '')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+function extractNextData(html) {
+  const match = html.match(/<script[^>]*id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
+  if (!match) return null;
+  try {
+    return JSON.parse(match[1]);
+  } catch {
+    return null;
+  }
+}
+
+function stripHtmlTags(html) {
+  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function extractRelevantSnippets(text, keywords) {
@@ -277,197 +292,133 @@ async function checkSource(source) {
 
 // Parse the byråtoppen leaderboard from HTML
 // Looks for patterns like ranked lists of agency names with point numbers
-function parseByratoppen(html) {
-  const leaderboard = [];
+function parseByratoppenFromNextData(html) {
+  const nextData = extractNextData(html);
+  if (!nextData) return [];
 
-  // Try to find a structured list/table with agency names and points
-  // Pattern 1: Look for <li> or <tr> elements with agency names and numbers
-  const tableRowPattern = /<tr[^>]*>[\s\S]*?<\/tr>/gi;
-  const rows = html.match(tableRowPattern) || [];
+  const containers = nextData.props?.containers || [];
+  const bodyParts = nextData.props?.bodyParts || [];
 
-  for (const row of rows) {
-    const cells = row.match(/<td[^>]*>([\s\S]*?)<\/td>/gi) || [];
-    if (cells.length >= 2) {
-      const cellTexts = cells.map(c => stripHtml(c));
-      // Look for a row that has a number (rank or points) and a name
-      const numCell = cellTexts.find(t => /^\d+$/.test(t.trim()));
-      const nameCell = cellTexts.find(t => /^[A-ZÅÄÖa-zåäö]/.test(t.trim()) && t.trim().length > 2);
-      if (numCell && nameCell) {
-        const pointsCell = cellTexts.filter(t => /^\d+$/.test(t.trim()));
-        leaderboard.push({
-          agency: nameCell.trim(),
-          points: parseInt(pointsCell[pointsCell.length - 1]) || 0
-        });
-      }
-    }
-  }
-
-  // Pattern 2: Look for ordered list items
-  if (leaderboard.length === 0) {
-    const listPattern = /<li[^>]*>([\s\S]*?)<\/li>/gi;
-    const items = html.match(listPattern) || [];
-    for (const item of items) {
-      const text = stripHtml(item);
-      // Match "Agency Name – 42p" or "Agency Name 42 poäng" patterns
-      const match = text.match(/^(.+?)\s*[-–—]\s*(\d+)\s*(?:p|poäng)?$/i)
-        || text.match(/^(\d+)\.\s*(.+?)\s+(\d+)\s*(?:p|poäng)?$/i);
-      if (match) {
-        leaderboard.push({
-          agency: (match[2] || match[1]).trim(),
-          points: parseInt(match[3] || match[2]) || 0
-        });
-      }
-    }
-  }
-
-  // Pattern 3: Plain text with numbered list
-  if (leaderboard.length === 0) {
-    const text = stripHtml(html);
-    const lines = text.split(/(?:\d+[\.\)]\s)/);
-    for (const line of lines) {
-      const match = line.trim().match(/^(.+?)\s*[-–—,]\s*(\d+)\s*(?:p|poäng)/i);
-      if (match) {
-        leaderboard.push({
-          agency: match[1].trim(),
-          points: parseInt(match[2]) || 0
-        });
-      }
-    }
-  }
-
-  // Pattern 4: Continuous text "1. Agency Name 123 poäng 2. Agency Name 45 poäng"
-  // This handles resume.se's format where everything is on one line
-  if (leaderboard.length === 0) {
-    const text = stripHtml(html);
-    // Match "poäng" or just "p" after the number
-    const pattern = /(\d+)\.\s*([A-ZÅÄÖa-zåäöÀ-ɏ][A-ZÅÄÖa-zåäöÀ-ɏ\s&,.'·\-\/()]+?)\s+(\d+)\s*(?:poäng|p(?:\s|$|\d))/gi;
-    let match;
-    while ((match = pattern.exec(text)) !== null) {
-      leaderboard.push({
-        agency: match[2].trim(),
-        points: parseInt(match[3]) || 0
-      });
-    }
-  }
-
-  // Pattern 5: Looser pattern - "N. Name ... N p" with anything between
-  if (leaderboard.length === 0) {
-    const text = stripHtml(html);
-    const pattern = /(\d+)\.\s*(.+?)\s+(\d+)\s*(?:poäng|p(?:\b|$))/gi;
-    let match;
-    while ((match = pattern.exec(text)) !== null) {
-      const agency = match[2].trim();
-      if (agency.length > 2 && agency.length < 60 && /^[A-ZÅÄÖa-zåäöÀ-ɏ]/.test(agency)) {
-        leaderboard.push({
-          agency,
-          points: parseInt(match[3]) || 0
-        });
-      }
-    }
-  }
-
-  // Sort by points descending and add ranks
-  leaderboard.sort((a, b) => b.points - a.points);
-  return leaderboard.map((entry, i) => ({
-    rank: i + 1,
-    agency: entry.agency,
-    points: entry.points,
-    wins: 0,   // Will be enriched from category data
-    podiums: 0
-  }));
-}
-
-// Parse a category page for top list and deadline
-function parseCategoryTopList(html, categoryName) {
-  const results = [];
-  let text = stripHtml(html);
-
-  // Remove the Byråtoppen sidebar section (shared across all pages)
-  // It appears as "byråtoppen ... 1. Agency 327 poäng ... se hela listan"
-  text = text.replace(/byråtoppen\s+\d{4}\s*[–\-]\s*alla\s+kategorier[\s\S]*?se\s+hela\s+listan/gi, '');
-
-  // Remove copyright footer section
-  text = text.replace(/org\.\s*nr\s*\d[\s\S]*$/gi, '');
-  text = text.replace(/upphovsrättslagen[\s\S]*$/gi, '');
-  text = text.replace(/personuppgiftspolicy[\s\S]*$/gi, '');
-
-  // Remove common sidebar/footer text that appears on all resume.se pages
-  text = text.replace(/populära\s+ämnen[\s\S]*$/gi, '');
-  text = text.replace(/kundservice[\s\S]*$/gi, '');
-
-  // Strategy 1: Look for category-specific ranked entries "1. Agency Name"
-  // Only accept entries with rank <= 20 and no "poäng" (which indicates Byråtoppen)
-  const rankedPattern = /(\d+)\.\s*([A-ZÅÄÖa-zåäö][^\d\n]{2,50})/g;
-  let match;
-  while ((match = rankedPattern.exec(text)) !== null) {
-    const rank = parseInt(match[1]);
-    if (rank > 20) continue;
-    const agency = match[2].trim()
-      .replace(/\s*[-–].*$/, '')
-      .replace(/\s*\d+\s*(?:p|poäng).*$/, '');
-    if (agency.length > 2 && agency.length < 60 &&
-        !/poäng|upphovsrätt|innehåll|resume\.se|skyddas|bonnier/i.test(agency)) {
-      results.push({ rank, agency });
-    }
-  }
-
-  // Strategy 2: If no ranked entries, look for winner mentions in article headlines
-  // Only match "Agency vinner månadens Category" — the most reliable pattern
-  if (results.length === 0) {
-    const catNameLower = categoryName.toLowerCase().replace(/^månadens\s*/i, '');
-    const winnerPattern = new RegExp(
-      `([A-ZÅÄÖa-zåäö][A-ZÅÄÖa-zåäö\\s&,.'·\\-\\/()]+?)\\s+vinner\\s+månadens\\s+${catNameLower}`, 'gi'
-    );
-
-    const seen = new Set();
-    while ((match = winnerPattern.exec(text)) !== null) {
-      const agency = match[1].trim().replace(/\s+/g, ' ');
-      const key = agency.toLowerCase();
-      if (agency.length > 2 && agency.length < 40 && !seen.has(key) &&
-          !/upphovsrätt|innehåll|resume|skyddas|bonnier|skrivet|artikel|kampanj|klassisk/i.test(agency)) {
-        seen.add(key);
-        results.push({ rank: results.length + 1, agency });
-      }
-    }
-  }
-
-  // Extract deadline date from the page
-  let deadline = null;
-  let deadlineDisplay = null;
-
-  const svMonths = {
-    'januari': '01', 'februari': '02', 'mars': '03', 'april': '04',
-    'maj': '05', 'juni': '06', 'juli': '07', 'augusti': '08',
-    'september': '09', 'oktober': '10', 'november': '11', 'december': '12'
-  };
-
-  const deadlinePatterns = [
-    /(?:deadline|sista\s*dag|skicka\s*in|bidrag\s*senast|sista\s*inlämning)[:\s]*(\d{1,2})\s+(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)\s*(\d{4})?/gi,
-    /(\d{1,2})\s+(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)\s*(\d{4})?/gi,
-    /(\d{4})-(\d{2})-(\d{2})/g
+  const allParts = [
+    ...bodyParts,
+    ...containers.flatMap(c => c.bodyParts || [])
   ];
 
-  for (const pattern of deadlinePatterns) {
-    const deadlineMatch = pattern.exec(text);
-    if (deadlineMatch) {
-      if (deadlineMatch[0].includes('-') && deadlineMatch[0].length === 10) {
-        deadline = deadlineMatch[0];
-        deadlineDisplay = deadlineMatch[0];
-      } else {
-        const day = deadlineMatch[1].padStart(2, '0');
-        const monthName = deadlineMatch[2].toLowerCase();
-        const month = svMonths[monthName];
-        const year = deadlineMatch[3] || new Date().getFullYear().toString();
-        if (month) {
-          deadline = `${year}-${month}-${day}`;
-          deadlineDisplay = `${deadlineMatch[1]} ${deadlineMatch[2]} ${year}`;
+  const leaderboard = [];
+  let inTotalt = false;
+
+  for (const part of allParts) {
+    if (part.type === 'subheading' && /totalt/i.test(part.text || '')) {
+      inTotalt = true;
+      continue;
+    }
+    if (part.type === 'subheading' && inTotalt) break;
+
+    if (part.type === 'paragraph' && part.bodyHtml) {
+      const text = stripHtmlTags(part.bodyHtml);
+      const match = text.match(/^(\d+)\.\s*(.+?)\s+(\d+)\s*poäng$/);
+      if (match) {
+        const agencies = match[2].split(/,\s*/);
+        const points = parseInt(match[3]);
+        for (const agency of agencies) {
+          leaderboard.push({ agency: agency.trim(), points });
         }
       }
-      break;
     }
   }
 
-  return { category: categoryName, topList: results.slice(0, 10), deadline, deadlineDisplay };
+  if (leaderboard.length === 0) return [];
+
+  leaderboard.sort((a, b) => b.points - a.points);
+  let currentRank = 1;
+  return leaderboard.map((entry, i) => {
+    if (i > 0 && entry.points < leaderboard[i - 1].points) currentRank = i + 1;
+    return { rank: currentRank, agency: entry.agency, points: entry.points, wins: 0, podiums: 0 };
+  });
+}
+
+function parseByratoppen(html) {
+  const leaderboard = [];
+  const text = stripHtml(html);
+
+  const pattern = /(\d+)\.\s*([A-ZÅÄÖa-zåäöÀ-ɏ][A-ZÅÄÖa-zåäöÀ-ɏ\s&,.'·\-\/()]+?)\s+(\d+)\s*(?:poäng|p(?:\s|$|\d))/gi;
+  let match;
+  while ((match = pattern.exec(text)) !== null) {
+    leaderboard.push({
+      agency: match[2].trim(),
+      points: parseInt(match[3]) || 0
+    });
+  }
+
+  leaderboard.sort((a, b) => b.points - a.points);
+  let currentRank = 1;
+  return leaderboard.map((entry, i) => {
+    if (i > 0 && entry.points < leaderboard[i - 1].points) currentRank = i + 1;
+    return { rank: currentRank, agency: entry.agency, points: entry.points, wins: 0, podiums: 0 };
+  });
+}
+
+function parseCategoryTopList(html, categoryName) {
+  const nextData = extractNextData(html);
+  if (!nextData) return { category: categoryName, topList: [], winners: [], categoryLeaderboard: [] };
+
+  const containers = nextData.props?.containers || [];
+  const topList = [];
+  const winners = [];
+  const categoryLeaderboard = [];
+
+  for (const container of containers) {
+    if (container.type !== 'bodypartsinfobox' || !container.bodyParts) continue;
+    const title = container.title || '';
+
+    if (/Vinnare/i.test(title)) {
+      for (const part of container.bodyParts) {
+        if (part.type !== 'paragraph' || !part.bodyHtml) continue;
+        const text = stripHtmlTags(part.bodyHtml);
+        if (/^kalkon/i.test(text)) continue;
+
+        const rankMatch = text.match(/^(\d+)\.\s*/);
+        if (!rankMatch) continue;
+        const rank = parseInt(rankMatch[1]);
+        const rest = text.slice(rankMatch[0].length);
+
+        let campaignName = '', agency = '', client = '';
+        const byraMatch = rest.match(/Byrå:\s*(.+?)(?:\s*Kund:|$)/i);
+        const kundMatch = rest.match(/Kund:\s*(.+?)(?:\s*Byrå:|$)/i);
+
+        if (byraMatch) agency = byraMatch[1].trim();
+        if (kundMatch) client = kundMatch[1].trim();
+
+        if (agency || client) {
+          campaignName = rest.replace(/\s*(?:Byrå|Kund):.*/i, '').replace(/^[""\s]+|[""\s]+$/g, '').trim();
+        } else {
+          campaignName = rest.trim();
+        }
+
+        topList.push({ rank, agency: agency || client || campaignName });
+        winners.push({ rank, campaign: campaignName, agency, client });
+      }
+    }
+
+    if (/Byråtoppen/i.test(title) && !/alla\s+kategorier/i.test(title)) {
+      for (const part of container.bodyParts) {
+        if (part.type !== 'paragraph' || !part.bodyHtml) continue;
+        const text = stripHtmlTags(part.bodyHtml);
+        if (/se\s+hela/i.test(text)) continue;
+        const entryPattern = /(\d+)\s*\.\s*(.+?)\s+(\d+)\s*poäng/g;
+        let entryMatch;
+        while ((entryMatch = entryPattern.exec(text)) !== null) {
+          const agencies = entryMatch[2].split(/,\s*/);
+          const points = parseInt(entryMatch[3]);
+          for (const a of agencies) {
+            categoryLeaderboard.push({ rank: parseInt(entryMatch[1]), agency: a.trim(), points });
+          }
+        }
+      }
+    }
+  }
+
+  return { category: categoryName, topList: topList.slice(0, 10), winners, categoryLeaderboard };
 }
 
 // Parse the tävlingsschema (competition schedule) from the main page
@@ -556,56 +507,78 @@ async function scrapeManadens() {
     errors: []
   };
 
-  // 1. Scrape Byråtoppen (main leaderboard) + Tävlingsschema
-  process.stdout.write('\n  Fetching Byråtoppen & Tävlingsschema...');
+  // 1. Scrape Byråtoppen from "hela listan" article (structured __NEXT_DATA__)
+  process.stdout.write('\n  Fetching Byråtoppen (hela listan)...');
   try {
-    const { status, body } = await fetchPage(MANADENS_PAGES.byratoppen);
+    const { status, body } = await fetchPage(MANADENS_PAGES.helaListan);
     if (status === 200) {
-      result.byratoppen = parseByratoppen(body);
+      result.byratoppen = parseByratoppenFromNextData(body);
+      if (result.byratoppen.length === 0) {
+        result.byratoppen = parseByratoppen(body);
+      }
       console.log(` OK (${result.byratoppen.length} agencies found)`);
-
       if (result.byratoppen.length > 0) {
         console.log('  Leaderboard:');
         result.byratoppen.slice(0, 15).forEach(r => {
           console.log(`    ${String(r.rank).padStart(2)}. ${r.agency.padEnd(35)} ${r.points}p`);
         });
-      } else {
-        console.log('  WARNING: Could not parse leaderboard. Page may require auth or structure changed.');
-        console.log('  Raw text preview:', stripHtml(body).substring(0, 500));
       }
+    } else {
+      console.log(` HTTP ${status}`);
+      result.errors.push({ page: 'helaListan', status });
+    }
+  } catch (err) {
+    console.log(` FAILED: ${err.message}`);
+    result.errors.push({ page: 'helaListan', error: err.message });
+  }
 
-      // Parse tävlingsschema from the same page
+  // Fallback: try main page sidebar if hela listan failed
+  if (result.byratoppen.length === 0) {
+    process.stdout.write('  Fallback: Fetching from main page sidebar...');
+    try {
+      const { status, body } = await fetchPage(MANADENS_PAGES.byratoppen);
+      if (status === 200) {
+        result.byratoppen = parseByratoppen(body);
+        console.log(` OK (${result.byratoppen.length} agencies)`);
+      }
+    } catch (err) {
+      console.log(` FAILED: ${err.message}`);
+    }
+  }
+
+  // 2. Scrape tävlingsschema from the main page
+  process.stdout.write('\n  Fetching Tävlingsschema...');
+  try {
+    const { status, body } = await fetchPage(MANADENS_PAGES.byratoppen);
+    if (status === 200) {
       result.schedule = parseTavlingsschema(body);
       result.nextDeadlines = getNextDeadlines(result.schedule);
       if (result.schedule.length > 0) {
-        console.log(`\n  Tävlingsschema: ${result.schedule.length} rounds found`);
+        console.log(` OK (${result.schedule.length} rounds)`);
         for (const [catId, info] of Object.entries(result.nextDeadlines)) {
           console.log(`    ${catId.padEnd(12)} next deadline: ${info.deadline} (${info.deadlineInfo})`);
         }
       } else {
-        console.log('\n  WARNING: Could not parse tävlingsschema from page.');
+        console.log(' WARNING: Could not parse tävlingsschema.');
       }
     } else {
       console.log(` HTTP ${status}`);
-      result.errors.push({ page: 'byratoppen', status });
     }
   } catch (err) {
     console.log(` FAILED: ${err.message}`);
-    result.errors.push({ page: 'byratoppen', error: err.message });
   }
 
-  // 2. Scrape each category page
+  // 3. Scrape each category page (using __NEXT_DATA__ from correct URLs)
   for (const cat of MANADENS_PAGES.categories) {
     process.stdout.write(`  Fetching ${cat.name}...`);
     try {
       const { status, body } = await fetchPage(cat.url);
       if (status === 200) {
-        const topList = parseCategoryTopList(body, cat.name);
-        result.categoryTopLists.push({ id: cat.id, ...topList });
-        console.log(` OK (${topList.topList.length} entries)`);
-
-        if (topList.topList.length > 0) {
-          topList.topList.slice(0, 3).forEach(e => {
+        const parsed = parseCategoryTopList(body, cat.name);
+        result.categoryTopLists.push({ id: cat.id, ...parsed });
+        console.log(` OK (${parsed.topList.length} winners, ${parsed.categoryLeaderboard.length} in byråtoppen)`);
+        if (parsed.topList.length > 0) {
+          parsed.topList.slice(0, 3).forEach(e => {
             console.log(`    ${e.rank}. ${e.agency}`);
           });
         }
@@ -619,7 +592,7 @@ async function scrapeManadens() {
     }
   }
 
-  // 3. Enrich leaderboard with win/podium counts from category data
+  // 4. Enrich leaderboard with win/podium counts from category data
   if (result.byratoppen.length > 0 && result.categoryTopLists.length > 0) {
     const agencyStats = {};
     for (const cat of result.categoryTopLists) {
