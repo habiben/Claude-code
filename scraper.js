@@ -335,6 +335,20 @@ function parseByratoppen(html) {
     }
   }
 
+  // Pattern 4: Continuous text "1. Agency Name 123 poäng 2. Agency Name 45 poäng"
+  // This handles resume.se's format where everything is on one line
+  if (leaderboard.length === 0) {
+    const text = stripHtml(html);
+    const pattern = /(\d+)\.\s*([A-ZÅÄÖa-zåäö][A-ZÅÄÖa-zåäö\s&,.'·\-]+?)\s+(\d+)\s*poäng/gi;
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      leaderboard.push({
+        agency: match[2].trim(),
+        points: parseInt(match[3]) || 0
+      });
+    }
+  }
+
   // Sort by points descending and add ranks
   leaderboard.sort((a, b) => b.points - a.points);
   return leaderboard.map((entry, i) => ({
@@ -592,26 +606,50 @@ function updateDataJs(manadensResult) {
   const dataPath = path.join(__dirname, 'data.js');
   let content = fs.readFileSync(dataPath, 'utf-8');
 
-  if (manadensResult.byratoppen.length === 0) {
-    console.log('\n  SKIP: No leaderboard data scraped, data.js not modified.');
-    return false;
+  let leaderboardUpdated = false;
+
+  // Build new leaderboard if we scraped byråtoppen
+  if (manadensResult.byratoppen.length > 0) {
+    const leaderboardEntries = manadensResult.byratoppen.slice(0, 20).map(r => {
+      const agency = r.agency.replace(/"/g, '\\"');
+      return `    { rank: ${r.rank}, agency: "${agency}", points: ${r.points}, wins: ${r.wins}, podiums: ${r.podiums} }`;
+    });
+
+    const newLeaderboard = `leaderboard: [\n${leaderboardEntries.join(',\n')}\n  ]`;
+
+    const leaderboardRegex = /leaderboard:\s*\[[\s\S]*?\n\s*\]/;
+    if (leaderboardRegex.test(content)) {
+      content = content.replace(leaderboardRegex, newLeaderboard);
+      leaderboardUpdated = true;
+    } else {
+      console.log('\n  WARNING: Could not find leaderboard array in data.js');
+    }
   }
 
-  // Build new leaderboard array string
-  const leaderboardEntries = manadensResult.byratoppen.slice(0, 15).map(r => {
-    const agency = r.agency.replace(/'/g, "\\'");
-    return `    { rank: ${r.rank}, agency: '${agency}', points: ${r.points}, wins: ${r.wins}, podiums: ${r.podiums} }`;
-  });
+  // Even without fresh byråtoppen, update wins/podiums from category data
+  if (!leaderboardUpdated && manadensResult.categoryTopLists && manadensResult.categoryTopLists.length > 0) {
+    console.log('\n  Updating wins/podiums from category data (leaderboard not scraped):');
+    const agencyStats = {};
+    for (const cat of manadensResult.categoryTopLists) {
+      for (const entry of cat.topList) {
+        if (!agencyStats[entry.agency]) {
+          agencyStats[entry.agency] = { wins: 0, podiums: 0 };
+        }
+        if (entry.rank === 1) agencyStats[entry.agency].wins++;
+        if (entry.rank <= 3) agencyStats[entry.agency].podiums++;
+      }
+    }
 
-  const newLeaderboard = `leaderboard: [\n${leaderboardEntries.join(',\n')}\n  ]`;
-
-  // Replace existing leaderboard in data.js
-  const leaderboardRegex = /leaderboard:\s*\[[\s\S]*?\n\s*\]/;
-  if (leaderboardRegex.test(content)) {
-    content = content.replace(leaderboardRegex, newLeaderboard);
-  } else {
-    console.log('\n  WARNING: Could not find leaderboard array in data.js');
-    return false;
+    for (const [agency, stats] of Object.entries(agencyStats)) {
+      const escaped = agency.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const winsRegex = new RegExp(`(agency:\\s*"${escaped}"[^}]*wins:\\s*)\\d+`);
+      const podiumsRegex = new RegExp(`(agency:\\s*"${escaped}"[^}]*podiums:\\s*)\\d+`);
+      if (winsRegex.test(content)) {
+        content = content.replace(winsRegex, `$1${stats.wins}`);
+        content = content.replace(podiumsRegex, `$1${stats.podiums}`);
+        console.log(`    ${agency}: ${stats.wins} wins, ${stats.podiums} podiums`);
+      }
+    }
   }
 
   // Update category deadlines from tävlingsschema
@@ -653,7 +691,7 @@ function updateDataJs(manadensResult) {
   );
 
   fs.writeFileSync(dataPath, content, 'utf-8');
-  console.log(`\n  SUCCESS: data.js updated with ${manadensResult.byratoppen.length} leaderboard entries (${today})`);
+  console.log(`\n  SUCCESS: data.js updated (${today}). Leaderboard: ${leaderboardUpdated ? manadensResult.byratoppen.length + ' entries' : 'kept existing'}. Categories: ${manadensResult.categoryTopLists.length} scraped.`);
   return true;
 }
 
