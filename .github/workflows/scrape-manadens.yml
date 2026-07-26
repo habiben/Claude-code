@@ -33,4 +33,5 @@ jobs:
           git add data.js
           git diff --staged --quiet && echo "No changes to commit" && exit 0
           git commit -m "Update Månadens Kampanj standings $(date -u +%Y-%m-%d)"
+          git pull --rebase origin main
           git push
