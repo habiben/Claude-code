@@ -344,25 +344,25 @@ window.MANADENS_DATA = {
       id: "film",
       name: "Månadens Film",
       description: "Bästa reklamfilm – TV, online, sociala medier",
-      deadlineInfo: "maj-augusti-omgången",
+      deadlineInfo: "juni-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: []
+      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
     },
     {
       id: "hantverk",
       name: "Månadens Hantverk",
       description: "Bästa hantverk – craft, produktion, utförande",
-      deadlineInfo: "Maj–augusti-omgången",
+      deadlineInfo: "maj-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: []
+      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
     },
     {
       id: "ide",
       name: "Månadens Idé",
       description: "Bästa kreativa idé – oavsett kanal eller format",
-      deadlineInfo: "maj-augusti-omgången",
+      deadlineInfo: "juni-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: []
+      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
     },
     {
       id: "politik",
@@ -370,23 +370,23 @@ window.MANADENS_DATA = {
       description: "Bästa politiska kampanj eller samhällskommunikation",
       deadlineInfo: "Datum ej angivet",
       nextDeadline: "",
-      topList: []
+      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
     },
     {
       id: "print",
       name: "Månadens Print",
       description: "Bästa tryckta annons – tidningar, magasin",
-      deadlineInfo: "Maj–augusti-omgången",
+      deadlineInfo: "maj-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: []
+      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
     },
     {
       id: "utomhus",
       name: "Månadens Utomhus",
       description: "Bästa utomhusreklam – affischer, DOOH, installationer",
-      deadlineInfo: "Maj–augusti-omgången",
+      deadlineInfo: "maj-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: []
+      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
     }
   ],
   pointsSystem: {
@@ -406,14 +406,14 @@ window.MANADENS_DATA = {
     { rank: 8, agency: "Kontiki", points: 48, wins: 0, podiums: 0 },
     { rank: 8, agency: "Rio Pictures", points: 48, wins: 0, podiums: 0 },
     { rank: 8, agency: "Differ Agency", points: 48, wins: 0, podiums: 0 },
-    { rank: 9, agency: "Qvennerstedt Eghammer Malm", points: 45, wins: 0, podiums: 0 },
-    { rank: 10, agency: "Kid collective", points: 27, wins: 0, podiums: 0 },
-    { rank: 11, agency: "Stendahls", points: 24, wins: 0, podiums: 0 },
-    { rank: 11, agency: "Kurppa Hosk Communications", points: 24, wins: 0, podiums: 0 },
-    { rank: 12, agency: "Rocket-Science", points: 9, wins: 0, podiums: 0 },
-    { rank: 12, agency: "Spöket", points: 9, wins: 0, podiums: 0 },
-    { rank: 12, agency: "Dear Friends", points: 9, wins: 0, podiums: 0 },
-    { rank: 12, agency: "First Lady Agency", points: 9, wins: 0, podiums: 0 }
+    { rank: 11, agency: "Qvennerstedt Eghammer Malm", points: 45, wins: 0, podiums: 0 },
+    { rank: 12, agency: "Kid collective", points: 27, wins: 0, podiums: 0 },
+    { rank: 13, agency: "Stendahls", points: 24, wins: 0, podiums: 0 },
+    { rank: 13, agency: "Kurppa Hosk Communications", points: 24, wins: 0, podiums: 0 },
+    { rank: 15, agency: "Rocket-Science", points: 9, wins: 0, podiums: 0 },
+    { rank: 15, agency: "Spöket", points: 9, wins: 0, podiums: 0 },
+    { rank: 15, agency: "Dear Friends", points: 9, wins: 0, podiums: 0 },
+    { rank: 15, agency: "First Lady Agency", points: 9, wins: 0, podiums: 0 }
   ],
   lastUpdated: "2026-07-26",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
