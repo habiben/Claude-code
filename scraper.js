@@ -339,13 +339,30 @@ function parseByratoppen(html) {
   // This handles resume.se's format where everything is on one line
   if (leaderboard.length === 0) {
     const text = stripHtml(html);
-    const pattern = /(\d+)\.\s*([A-ZÅÄÖa-zåäö][A-ZÅÄÖa-zåäö\s&,.'·\-]+?)\s+(\d+)\s*poäng/gi;
+    // Match "poäng" or just "p" after the number
+    const pattern = /(\d+)\.\s*([A-ZÅÄÖa-zåäöÀ-ɏ][A-ZÅÄÖa-zåäöÀ-ɏ\s&,.'·\-\/()]+?)\s+(\d+)\s*(?:poäng|p(?:\s|$|\d))/gi;
     let match;
     while ((match = pattern.exec(text)) !== null) {
       leaderboard.push({
         agency: match[2].trim(),
         points: parseInt(match[3]) || 0
       });
+    }
+  }
+
+  // Pattern 5: Looser pattern - "N. Name ... N p" with anything between
+  if (leaderboard.length === 0) {
+    const text = stripHtml(html);
+    const pattern = /(\d+)\.\s*(.+?)\s+(\d+)\s*(?:poäng|p(?:\b|$))/gi;
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      const agency = match[2].trim();
+      if (agency.length > 2 && agency.length < 60 && /^[A-ZÅÄÖa-zåäöÀ-ɏ]/.test(agency)) {
+        leaderboard.push({
+          agency,
+          points: parseInt(match[3]) || 0
+        });
+      }
     }
   }
 
@@ -439,7 +456,7 @@ function parseTavlingsschema(html) {
   };
 
   // Match patterns like "Tävlingsomgång X ... Deadline: DD month ... Aktuell kategori: ..."
-  const roundPattern = /Tävlingsomgång\s+([\w\-–åäöÅÄÖ]+(?:\s*[-–]\s*[\w]+)?)\s+.*?Deadline[:\s]*(\d{1,2})\s+(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)(?:\s+(\d{4}))?\s+.*?Aktuell kategori[:\s]*([^T]*?)(?=Tävlingsomgång|$)/gi;
+  const roundPattern = /Tävlingsomgång\s+([\w\-–åäöÅÄÖ]+(?:\s*[-–]\s*[\w]+)?)\s+.*?Deadline[:\s]*(\d{1,2})\s+(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)(?:\s+(\d{4}))?\s+.*?Aktuell(?:\s+|)kategori[:\s]*([\s\S]*?)(?=Tävlingsomgång|$)/gi;
 
   let match;
   while ((match = roundPattern.exec(text)) !== null) {
@@ -610,7 +627,57 @@ function updateDataJs(manadensResult) {
 
   // Build new leaderboard if we scraped byråtoppen
   if (manadensResult.byratoppen.length > 0) {
-    const leaderboardEntries = manadensResult.byratoppen.slice(0, 20).map(r => {
+    // Parse existing leaderboard from data.js for merging
+    const existingMatch = content.match(/leaderboard:\s*\[([\s\S]*?)\n\s*\]/);
+    let existingEntries = [];
+    if (existingMatch) {
+      const entryPattern = /rank:\s*(\d+),\s*agency:\s*"([^"]+)",\s*points:\s*(\d+),\s*wins:\s*(\d+),\s*podiums:\s*(\d+)/g;
+      let m;
+      while ((m = entryPattern.exec(existingMatch[1])) !== null) {
+        existingEntries.push({
+          rank: parseInt(m[1]), agency: m[2], points: parseInt(m[3]),
+          wins: parseInt(m[4]), podiums: parseInt(m[5])
+        });
+      }
+    }
+
+    let finalEntries;
+    const scraped = manadensResult.byratoppen;
+
+    if (scraped.length >= 10 || existingEntries.length === 0) {
+      // Enough scraped entries to fully replace
+      finalEntries = scraped;
+    } else {
+      // Merge: update existing entries with scraped points, keep unscraped entries
+      console.log(`\n  Merging ${scraped.length} scraped entries with ${existingEntries.length} existing entries`);
+      const scrapedMap = new Map(scraped.map(s => [s.agency.toLowerCase(), s]));
+      const merged = new Map();
+
+      // Add/update from scraped data
+      for (const s of scraped) {
+        merged.set(s.agency.toLowerCase(), { ...s });
+      }
+
+      // Keep existing entries not found in scraped data
+      for (const e of existingEntries) {
+        const key = e.agency.toLowerCase();
+        if (!merged.has(key)) {
+          merged.set(key, { ...e });
+        }
+      }
+
+      // Sort by points descending and re-rank
+      finalEntries = [...merged.values()].sort((a, b) => b.points - a.points);
+      let currentRank = 1;
+      for (let i = 0; i < finalEntries.length; i++) {
+        if (i > 0 && finalEntries[i].points < finalEntries[i - 1].points) {
+          currentRank = i + 1;
+        }
+        finalEntries[i].rank = currentRank;
+      }
+    }
+
+    const leaderboardEntries = finalEntries.slice(0, 20).map(r => {
       const agency = r.agency.replace(/"/g, '\\"');
       return `    { rank: ${r.rank}, agency: "${agency}", points: ${r.points}, wins: ${r.wins}, podiums: ${r.podiums} }`;
     });
