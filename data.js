@@ -346,7 +346,7 @@ window.MANADENS_DATA = {
       description: "Bästa reklamfilm – TV, online, sociala medier",
       deadlineInfo: "juni-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
+      topList: [{ rank: 1, agency: "Legora" }]
     },
     {
       id: "hantverk",
@@ -370,7 +370,7 @@ window.MANADENS_DATA = {
       description: "Bästa politiska kampanj eller samhällskommunikation",
       deadlineInfo: "Datum ej angivet",
       nextDeadline: "",
-      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Forsman & Bodenfors" }, { rank: 4, agency: "Volvo Cars inhouse" }, { rank: 5, agency: "Save Our Souls" }, { rank: 8892, agency: "Allt innehåll på resume.se skyddas av upphovsrättsl" }]
+      topList: [{ rank: 1, agency: "Redan klassisk S-kampanj" }]
     },
     {
       id: "print",
@@ -396,9 +396,9 @@ window.MANADENS_DATA = {
     description: "Poäng per placering: 1:a = 5p, 2:a = 3p, 3:a = 1p. Totalställningen summeras över årets alla omgångar."
   },
   leaderboard: [
-    { rank: 1, agency: "Åkestam Holst", points: 327, wins: 6, podiums: 6 },
-    { rank: 2, agency: "Nord", points: 282, wins: 0, podiums: 6 },
-    { rank: 3, agency: "Forsman & Bodenfors", points: 264, wins: 0, podiums: 6 },
+    { rank: 1, agency: "Åkestam Holst", points: 327, wins: 0, podiums: 0 },
+    { rank: 2, agency: "Nord", points: 282, wins: 0, podiums: 0 },
+    { rank: 3, agency: "Forsman & Bodenfors", points: 264, wins: 0, podiums: 0 },
     { rank: 4, agency: "Volvo Cars inhouse", points: 159, wins: 0, podiums: 0 },
     { rank: 5, agency: "Save Our Souls", points: 132, wins: 0, podiums: 0 },
     { rank: 6, agency: "BBDO Nordics", points: 99, wins: 0, podiums: 0 },
