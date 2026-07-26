@@ -24,7 +24,7 @@
     .run-btn { background: #0a66c2; color: #fff; border: none; padding: 13px 30px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.15s; margin-top: 4px; }
     .run-btn:hover:not(:disabled) { background: #0857a8; }
     .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .progress { display: none; background: #0d0d0d; border: 1px solid #1e1e1e; border-radius: 10px; padding: 18px 20px; margin-top: 28px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8rem; line-height: 1.7; max-height: 260px; overflow-y: auto; }
+    .progress { display: none; background: #0d0d0d; border: 1px solid #1e1e1e; border-radius: 10px; padding: 18px 20px; margin-top: 28px; font-family: 'SF Mono','Fira Code',monospace; font-size: 0.8rem; line-height: 1.7; max-height: 260px; overflow-y: auto; }
     .progress.show { display: block; }
     .log-line { color: #555; }
     .log-line.kw    { color: #5aabff; }
@@ -38,17 +38,18 @@
     .stat-l { font-size: 0.75rem; color: #555; margin-top: 5px; }
     .posts { display: flex; flex-direction: column; gap: 14px; }
     .card { background: #111; border: 1px solid #1e1e1e; border-radius: 12px; padding: 20px; }
-    .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 4px; }
     .card-author { font-weight: 600; font-size: 0.93rem; }
     .card-kw { font-size: 0.72rem; background: #1a1a1a; border: 1px solid #2a2a2a; color: #666; padding: 3px 10px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; }
     .card-kw.extra { color: #f5a623; background: #f5a62310; border-color: #f5a62330; }
+    .card-time { font-size: 0.75rem; color: #444; margin-bottom: 12px; }
     .card-text { color: #bbb; font-size: 0.88rem; line-height: 1.65; margin-bottom: 14px; white-space: pre-wrap; word-break: break-word; }
     .card-text.collapsed { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     .expand-btn { background: none; border: none; color: #0a66c2; cursor: pointer; font-size: 0.8rem; padding: 0; margin-bottom: 12px; display: block; }
     .card-meta { display: flex; gap: 14px; font-size: 0.8rem; color: #555; margin-bottom: 12px; }
     .agencies { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
     .agency { background: #0d1f0d; border: 1px solid #1a3a1a; color: #4caf7d; padding: 3px 10px; border-radius: 10px; font-size: 0.76rem; }
-    .toggle-comments { background: none; border: 1px solid #2a2a2a; color: #666; cursor: pointer; font-size: 0.8rem; padding: 6px 14px; border-radius: 6px; transition: border-color 0.15s, color 0.15s; }
+    .toggle-comments { background: none; border: 1px solid #2a2a2a; color: #666; cursor: pointer; font-size: 0.8rem; padding: 6px 14px; border-radius: 6px; }
     .toggle-comments:hover { border-color: #444; color: #bbb; }
     .comments { display: none; flex-direction: column; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #1a1a1a; }
     .comment { background: #0d0d0d; border-radius: 8px; padding: 10px 14px; }
@@ -77,71 +78,55 @@
   </div>
 
   <button class="run-btn" id="runBtn" onclick="start()">Kör sökning</button>
-
   <div class="progress" id="log"></div>
   <div id="results"></div>
 </div>
-
 <script>
-  let extras = [];
-  let posts  = [];
+  let extras = [], posts = [];
 
   fetch('/config').then(r => r.json()).then(({ baseKeywords }) => {
     const wrap = document.getElementById('baseKws');
     baseKeywords.forEach(kw => {
       const s = document.createElement('span');
-      s.className = 'base-kw';
-      s.textContent = kw;
+      s.className = 'base-kw'; s.textContent = kw;
       wrap.appendChild(s);
     });
   });
 
   const chipIn = document.getElementById('chipIn');
   const chipWrap = document.getElementById('chipWrap');
-
   chipWrap.addEventListener('click', () => chipIn.focus());
 
   chipIn.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      const val = chipIn.value.trim();
-      if (val) { addChip(val); chipIn.value = ''; }
+      const v = chipIn.value.trim();
+      if (v) { addChip(v); chipIn.value = ''; }
     }
-    if (e.key === 'Backspace' && chipIn.value === '' && extras.length > 0) {
+    if (e.key === 'Backspace' && !chipIn.value && extras.length)
       removeChip(extras[extras.length - 1]);
-    }
   });
-
   chipIn.addEventListener('input', () => {
     if (chipIn.value.endsWith(',')) {
-      const val = chipIn.value.slice(0, -1).trim();
-      if (val) { addChip(val); chipIn.value = ''; }
+      const v = chipIn.value.slice(0,-1).trim();
+      if (v) { addChip(v); chipIn.value = ''; }
     }
   });
 
   function addChip(term) {
     if (!term || extras.includes(term)) return;
-    extras.push(term);
-    renderChips();
+    extras.push(term); renderChips();
   }
-
-  function removeChip(term) {
-    extras = extras.filter(k => k !== term);
-    renderChips();
-  }
-
+  function removeChip(term) { extras = extras.filter(k => k !== term); renderChips(); }
   function renderChips() {
     chipWrap.querySelectorAll('.chip').forEach(c => c.remove());
     extras.forEach(term => {
       const chip = document.createElement('span');
       chip.className = 'chip';
-      const label = document.createTextNode(term + ' ');
-      const btn   = document.createElement('button');
-      btn.className = 'chip-x';
-      btn.textContent = '×';
-      btn.type = 'button';
-      btn.addEventListener('click', (e) => { e.stopPropagation(); removeChip(term); });
-      chip.appendChild(label);
+      chip.appendChild(document.createTextNode(term + ' '));
+      const btn = document.createElement('button');
+      btn.className = 'chip-x'; btn.textContent = '×'; btn.type = 'button';
+      btn.addEventListener('click', e => { e.stopPropagation(); removeChip(term); });
       chip.appendChild(btn);
       chipWrap.insertBefore(chip, chipIn);
     });
@@ -151,6 +136,13 @@
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  function formatTime(iso, rel) {
+    if (rel) return rel;
+    if (!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleDateString('sv-SE', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  }
+
   async function start() {
     const btn = document.getElementById('runBtn');
     const log = document.getElementById('log');
@@ -158,103 +150,66 @@
     btn.disabled = true; btn.textContent = 'Söker…';
     log.innerHTML = ''; log.className = 'progress show';
     res.innerHTML = ''; posts = [];
-
     try {
       const r = await fetch('/scrape', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ extraKeywords: extras })
       });
-      if (!r.ok) { const e = await r.json(); addLog('FEL: ' + e.error, 'err'); done(btn); return; }
+      if (!r.ok) { const e = await r.json(); addLog('FEL: '+e.error,'err'); done(btn); return; }
       const { jobId } = await r.json();
-
-      const es = new EventSource('/stream/' + jobId);
-      es.addEventListener('searching', e => {
-        const d = JSON.parse(e.data);
-        addLog('Söker: "' + d.keyword + '"' + (d.isExtra ? ' [extra]' : ''), d.isExtra ? 'extra' : 'kw');
-      });
-      es.addEventListener('found', e => {
-        const d = JSON.parse(e.data);
-        addLog('  → ' + d.count + ' nya inlägg', 'ok');
-      });
-      es.addEventListener('post', e => {
-        const p = JSON.parse(e.data);
-        posts.push(p);
-        addLog('  ✓ ' + p.author.substring(0,40) + '  👍 ' + p.likes + '  💬 ' + p.comments, 'post');
-        renderResults();
-      });
-      es.addEventListener('error_msg', e => {
-        const d = JSON.parse(e.data);
-        addLog('  ✗ ' + (d.keyword ? d.keyword + ': ' : '') + d.message, 'err');
-      });
-      es.addEventListener('done', e => {
-        const d = JSON.parse(e.data);
-        addLog('Klart! ' + d.totalPosts + ' inlägg hämtade.', 'ok');
-        es.close(); done(btn);
-      });
+      const es = new EventSource('/stream/'+jobId);
+      es.addEventListener('searching', e => { const d=JSON.parse(e.data); addLog('Söker: "'+d.keyword+'"'+(d.isExtra?' [extra]':''), d.isExtra?'extra':'kw'); });
+      es.addEventListener('found',     e => { const d=JSON.parse(e.data); addLog('  → '+d.count+' nya inlägg','ok'); });
+      es.addEventListener('post',      e => { const p=JSON.parse(e.data); posts.push(p); addLog('  ✓ '+p.author.substring(0,40)+'  👍 '+p.likes+'  💬 '+p.comments,'post'); renderResults(); });
+      es.addEventListener('error_msg', e => { const d=JSON.parse(e.data); addLog('  ✗ '+(d.keyword?d.keyword+': ':'')+d.message,'err'); });
+      es.addEventListener('done',      e => { const d=JSON.parse(e.data); addLog('Klart! '+d.totalPosts+' inlägg hämtade.','ok'); es.close(); done(btn); });
       es.onerror = () => { es.close(); done(btn); };
-    } catch (err) {
-      addLog('FEL: ' + err.message, 'err'); done(btn);
-    }
+    } catch(err) { addLog('FEL: '+err.message,'err'); done(btn); }
   }
 
-  function done(btn) { btn.disabled = false; btn.textContent = 'Kör sökning'; }
-
-  function addLog(text, cls) {
-    const log = document.getElementById('log');
-    const d = document.createElement('div');
-    d.className = 'log-line ' + (cls || '');
-    d.textContent = text;
-    log.appendChild(d);
-    log.scrollTop = log.scrollHeight;
+  function done(btn) { btn.disabled=false; btn.textContent='Kör sökning'; }
+  function addLog(text,cls) {
+    const log=document.getElementById('log');
+    const d=document.createElement('div'); d.className='log-line '+(cls||''); d.textContent=text;
+    log.appendChild(d); log.scrollTop=log.scrollHeight;
   }
 
   function renderResults() {
-    const withC = posts.filter(p => p.commentsList?.length).length;
-    const withA = posts.filter(p => p.mentionedAgencies?.length).length;
-    document.getElementById('results').innerHTML = `
+    const withC=posts.filter(p=>p.commentsList&&p.commentsList.length).length;
+    const withA=posts.filter(p=>p.mentionedAgencies&&p.mentionedAgencies.length).length;
+    document.getElementById('results').innerHTML=`
       <div class="stats">
         <div class="stat"><div class="stat-n">${posts.length}</div><div class="stat-l">Inlägg</div></div>
         <div class="stat"><div class="stat-n">${withC}</div><div class="stat-l">Med kommentarer</div></div>
         <div class="stat"><div class="stat-n">${withA}</div><div class="stat-l">Nämnanden</div></div>
       </div>
-      <div class="posts">${posts.map((p,i) => card(p,i)).join('')}</div>`;
+      <div class="posts">${posts.map((p,i)=>card(p,i)).join('')}</div>`;
   }
 
-  function card(p, i) {
-    const agencies = (p.mentionedAgencies||[]).map(a => `<span class="agency">${x(a)}</span>`).join('');
-    const comments = (p.commentsList||[]).map(c =>
-      `<div class="comment"><div class="comment-author">${x(c.author)}</div><div class="comment-text">${x(c.text)}</div></div>`
-    ).join('');
-    const long = p.text.length > 220;
-    return `
-      <div class="card">
-        <div class="card-head">
-          <span class="card-author">${x(p.author)}</span>
-          <span class="card-kw${p.isExtra?' extra':''}">${x(p.matchedKeyword)}</span>
-        </div>
-        <div class="card-text${long?' collapsed':''}" id="ct${i}">${x(p.text)}</div>
-        ${long?`<button class="expand-btn" onclick="expand(${i})">Visa mer</button>`:''}
-        <div class="card-meta"><span>👍 ${p.likes}</span><span>💬 ${p.comments}</span><span>🔄 ${p.shares}</span></div>
-        ${agencies?`<div class="agencies">${agencies}</div>`:''}
-        ${comments?`<button class="toggle-comments" onclick="toggleC(${i})">Visa kommentarer (${p.commentsList.length})</button><div class="comments" id="cm${i}">${comments}</div>`:''}
-        <a href="${x(p.url)}" class="card-link" target="_blank" rel="noopener">Öppna på LinkedIn ↗</a>
-      </div>`;
+  function card(p,i) {
+    const agencies=(p.mentionedAgencies||[]).map(a=>`<span class="agency">${x(a)}</span>`).join('');
+    const comments=(p.commentsList||[]).map(c=>`<div class="comment"><div class="comment-author">${x(c.author)}</div><div class="comment-text">${x(c.text)}</div></div>`).join('');
+    const long=p.text&&p.text.length>220;
+    const timeStr=formatTime(p.createdAt, p.relativeTime);
+    return `<div class="card">
+      <div class="card-head"><span class="card-author">${x(p.author)}</span><span class="card-kw${p.isExtra?' extra':''}">${x(p.matchedKeyword)}</span></div>
+      ${timeStr?`<div class="card-time">${x(timeStr)}</div>`:''}
+      <div class="card-text${long?' collapsed':''}" id="ct${i}">${x(p.text||'')}</div>
+      ${long?`<button class="expand-btn" onclick="expand(${i})">Visa mer</button>`:''}
+      <div class="card-meta"><span>👍 ${p.likes}</span><span>💬 ${p.comments}</span><span>🔄 ${p.shares}</span></div>
+      ${agencies?`<div class="agencies">${agencies}</div>`:''}
+      ${comments?`<button class="toggle-comments" onclick="toggleC(${i})">Visa kommentarer (${p.commentsList.length})</button><div class="comments" id="cm${i}">${comments}</div>`:''}
+      <a href="${x(p.url)}" class="card-link" target="_blank" rel="noopener">Öppna på LinkedIn ↗</a>
+    </div>`;
   }
 
   function expand(i) {
-    const el = document.getElementById('ct'+i);
-    const btn = el.nextElementSibling;
-    if (btn && btn.classList.contains('expand-btn')) {
-      el.classList.toggle('collapsed');
-      btn.textContent = el.classList.contains('collapsed') ? 'Visa mer' : 'Visa mindre';
-    }
+    const el=document.getElementById('ct'+i), btn=el.nextElementSibling;
+    if(btn&&btn.classList.contains('expand-btn')) { el.classList.toggle('collapsed'); btn.textContent=el.classList.contains('collapsed')?'Visa mer':'Visa mindre'; }
   }
-
   function toggleC(i) {
-    const el = document.getElementById('cm'+i);
-    el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
-    el.style.flexDirection = 'column';
+    const el=document.getElementById('cm'+i);
+    el.style.display=el.style.display==='flex'?'none':'flex'; el.style.flexDirection='column';
   }
 </script>
 </body>
