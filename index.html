@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ad Awards Deadline Tracker 2025/2026</title>
+  <title>ÅHwards — Ad Awards Deadline Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -65,23 +65,18 @@
       background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
       pointer-events: none;
     }
-    .logo {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1rem;
-      position: relative;
-    }
-    .logo-svg {
-      width: clamp(280px, 50vw, 420px);
-      height: auto;
-    }
-    .header h1 {
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
+    .site-title {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
       font-weight: 400;
-      letter-spacing: -0.03em;
+      letter-spacing: 0.04em;
+      background: linear-gradient(135deg, #6366f1, #818cf8, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       position: relative;
+      margin-bottom: 0.25rem;
     }
-    .header h1 span { color: var(--accent); }
     .header p {
       color: var(--text-muted);
       margin-top: 0.5rem;
@@ -634,36 +629,7 @@
 
   <!-- HEADER -->
   <header class="header">
-    <div class="logo" aria-label="ÅHdspur">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="-18 0 270 56" class="logo-svg">
-        <!-- Logo mark: abstract award trophy / signal icon -->
-        <defs>
-          <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#6366f1"/>
-            <stop offset="50%" stop-color="#818cf8"/>
-            <stop offset="100%" stop-color="#a78bfa"/>
-          </linearGradient>
-          <linearGradient id="dotGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#f59e0b"/>
-            <stop offset="100%" stop-color="#ef4444"/>
-          </linearGradient>
-        </defs>
-        <!-- Icon: stylized signal/pulse mark -->
-        <g transform="translate(4, 2)">
-          <rect x="0" y="16" width="6" height="28" rx="3" fill="url(#logoGrad)" opacity="0.5"/>
-          <rect x="10" y="8" width="6" height="36" rx="3" fill="url(#logoGrad)" opacity="0.7"/>
-          <rect x="20" y="0" width="6" height="44" rx="3" fill="url(#logoGrad)"/>
-          <rect x="30" y="8" width="6" height="36" rx="3" fill="url(#logoGrad)" opacity="0.7"/>
-          <rect x="40" y="16" width="6" height="28" rx="3" fill="url(#logoGrad)" opacity="0.5"/>
-        </g>
-        <!-- Wordmark -->
-        <text x="58" y="39" font-family="'Inter', system-ui, sans-serif" font-size="36" font-weight="800" letter-spacing="-1.5" fill="#e8eaf0">
-          <tspan fill="url(#logoGrad)">ÅH</tspan>dspur
-        </text>
-
-      </svg>
-    </div>
-    <h1>Ad Awards <span>Deadline Tracker</span></h1>
+    <h1 class="site-title">ÅHwards</h1>
     <p>Submission deadlines, fees & resources for the world's biggest advertising award shows</p>
     <div class="header-actions">
       <button class="btn btn-primary" id="downloadAll" title="Download all deadlines as a calendar file">
