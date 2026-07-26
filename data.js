@@ -346,7 +346,7 @@ window.MANADENS_DATA = {
       description: "Bästa reklamfilm – TV, online, sociala medier",
       deadlineInfo: "juni-augusti-omgången",
       nextDeadline: "2026-08-31",
-      topList: [{ rank: 1, agency: "Legora" }]
+      topList: []
     },
     {
       id: "hantverk",
