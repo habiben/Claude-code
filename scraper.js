@@ -750,6 +750,27 @@ function updateDataJs(manadensResult) {
     }
   }
 
+  // Update category topList arrays from scraped data
+  if (manadensResult.categoryTopLists && manadensResult.categoryTopLists.length > 0) {
+    console.log('\n  Updating category top lists:');
+    for (const cat of manadensResult.categoryTopLists) {
+      if (cat.topList && cat.topList.length > 0) {
+        const entries = cat.topList.map(e => {
+          const agency = e.agency.replace(/"/g, '\\"');
+          return `{ rank: ${e.rank}, agency: "${agency}" }`;
+        });
+        const newTopList = `[${entries.join(', ')}]`;
+        const topListRegex = new RegExp(
+          `(id:\\s*"${cat.id}"[\\s\\S]*?topList:\\s*)\\[[^\\]]*\\]`
+        );
+        if (topListRegex.test(content)) {
+          content = content.replace(topListRegex, `$1${newTopList}`);
+          console.log(`    ${cat.id}: ${cat.topList.length} entries`);
+        }
+      }
+    }
+  }
+
   // Update lastUpdated date
   const today = new Date().toISOString().split('T')[0];
   content = content.replace(

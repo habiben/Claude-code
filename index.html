@@ -542,6 +542,58 @@
       padding: 0.2rem 0.7rem;
       border-radius: var(--radius-pill);
     }
+    .category-leaderboards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .cat-leaderboard {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .cat-leaderboard-header {
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .cat-leaderboard-empty {
+      padding: 1rem;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    .cat-leaderboard ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .cat-leaderboard li {
+      padding: 0.5rem 1rem;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border-bottom: 1px solid var(--surface-border);
+    }
+    .cat-leaderboard li:last-child { border-bottom: none; }
+    .cat-leaderboard li:hover { background: var(--surface-hover); }
+    .cat-rank {
+      width: 1.5rem;
+      text-align: center;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .cat-rank-1 { color: #f59e0b; }
+    .cat-rank-2 { color: #94a3b8; }
+    .cat-rank-3 { color: #cd7f32; }
+    .cat-agency { flex: 1; font-weight: 600; }
     .manadens-info {
       margin-top: 1.5rem;
       padding: 1rem 1.25rem;
@@ -681,6 +733,9 @@
           </table>
         </div>
       </div>
+
+      <div class="section-label" style="padding:1.5rem 0 0.75rem;">STÄLLNING PER KATEGORI</div>
+      <div class="category-leaderboards" id="categoryLeaderboards"></div>
 
       <div class="manadens-info">
         <strong>Anmälan:</strong> Gratis — skicka in bidrag löpande via <a href="https://resume.awardsplatform.com/" target="_blank" rel="noopener" style="color:var(--accent)">resume.awardsplatform.com</a><br>
@@ -1011,6 +1066,22 @@
             <td class="agency-cell">${escapeHtml(row.agency)}</td>
             <td class="points-cell"><span class="points-badge">${row.points}p</span></td>
           </tr>`;
+      }).join('');
+
+      const catLb = document.getElementById('categoryLeaderboards');
+      catLb.innerHTML = sortedCats.map(cat => {
+        const list = cat.topList && cat.topList.length > 0
+          ? `<ol>${cat.topList.map(e => {
+              const rc = e.rank === 1 ? 'cat-rank-1' : e.rank === 2 ? 'cat-rank-2' : e.rank === 3 ? 'cat-rank-3' : '';
+              const medal = e.rank === 1 ? '🥇' : e.rank === 2 ? '🥈' : e.rank === 3 ? '🥉' : e.rank;
+              return `<li><span class="cat-rank ${rc}">${medal}</span><span class="cat-agency">${escapeHtml(e.agency)}</span></li>`;
+            }).join('')}</ol>`
+          : `<div class="cat-leaderboard-empty">Uppdateras vid nästa scraping</div>`;
+        return `
+          <div class="cat-leaderboard">
+            <div class="cat-leaderboard-header">${escapeHtml(cat.name)}</div>
+            ${list}
+          </div>`;
       }).join('');
 
       document.getElementById('manadensUpdated').textContent = data.lastUpdated;

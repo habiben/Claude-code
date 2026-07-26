@@ -345,42 +345,48 @@ window.MANADENS_DATA = {
       name: "Månadens Film",
       description: "Bästa reklamfilm – TV, online, sociala medier",
       deadlineInfo: "maj-augusti-omgången",
-      nextDeadline: "2026-08-31"
+      nextDeadline: "2026-08-31",
+      topList: []
     },
     {
       id: "hantverk",
       name: "Månadens Hantverk",
       description: "Bästa hantverk – craft, produktion, utförande",
       deadlineInfo: "Maj–augusti-omgången",
-      nextDeadline: "2026-08-31"
+      nextDeadline: "2026-08-31",
+      topList: []
     },
     {
       id: "ide",
       name: "Månadens Idé",
       description: "Bästa kreativa idé – oavsett kanal eller format",
       deadlineInfo: "maj-augusti-omgången",
-      nextDeadline: "2026-08-31"
+      nextDeadline: "2026-08-31",
+      topList: []
     },
     {
       id: "politik",
       name: "Månadens Politik",
       description: "Bästa politiska kampanj eller samhällskommunikation",
       deadlineInfo: "Datum ej angivet",
-      nextDeadline: ""
+      nextDeadline: "",
+      topList: []
     },
     {
       id: "print",
       name: "Månadens Print",
       description: "Bästa tryckta annons – tidningar, magasin",
       deadlineInfo: "Maj–augusti-omgången",
-      nextDeadline: "2026-08-31"
+      nextDeadline: "2026-08-31",
+      topList: []
     },
     {
       id: "utomhus",
       name: "Månadens Utomhus",
       description: "Bästa utomhusreklam – affischer, DOOH, installationer",
       deadlineInfo: "Maj–augusti-omgången",
-      nextDeadline: "2026-08-31"
+      nextDeadline: "2026-08-31",
+      topList: []
     }
   ],
   pointsSystem: {
