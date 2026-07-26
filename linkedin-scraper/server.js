@@ -2,7 +2,7 @@ const express = require('express');
 const path    = require('path');
 const fs      = require('fs');
 const https   = require('https');
-const { scrapeLinkedIn, BASE_KEYWORDS, buildHeaders, buildSearchUrls } = require('./scraper');
+const { scrapeLinkedIn, BASE_KEYWORDS, buildHeaders, buildSearchUrl } = require('./scraper');
 
 const app  = express();
 const jobs = new Map();
@@ -19,7 +19,7 @@ app.get('/config', (_req, res) => {
   res.json({ baseKeywords: BASE_KEYWORDS });
 });
 
-// Debug: shows raw LinkedIn API response for each search URL variant
+// Debug: shows raw LinkedIn API response so the actual included-array types can be inspected
 app.get('/debug', (req, res) => {
   const liAt       = process.env.LINKEDIN_LI_AT;
   const jsessionid = process.env.LINKEDIN_JSESSIONID;
@@ -27,37 +27,44 @@ app.get('/debug', (req, res) => {
 
   const sessionToken = jsessionid.replace(/^"|"$/g, '');
   const keyword      = req.query.q || 'reklam';
-  const urls         = buildSearchUrls(keyword, 5);
-  const results      = [];
-  let idx = 0;
+  const url          = buildSearchUrl(keyword, 3);
 
-  function next() {
-    if (idx >= urls.length) return res.json({ keyword, results });
-    const url = urls[idx++];
-    const r = https.request({
-      hostname: 'www.linkedin.com',
-      path: url,
-      method: 'GET',
-      headers: buildHeaders(liAt, sessionToken),
-      timeout: 15000
-    }, (resp) => {
-      let data = '';
-      resp.on('data', c => data += c);
-      resp.on('end', () => {
-        results.push({
-          url: url.split('?')[0],
-          params: url.split('?')[1]?.slice(0, 120),
+  const r = https.request({
+    hostname: 'www.linkedin.com',
+    path: url,
+    method: 'GET',
+    headers: buildHeaders(liAt, sessionToken),
+    timeout: 15000
+  }, (resp) => {
+    let data = '';
+    resp.on('data', c => data += c);
+    resp.on('end', () => {
+      try {
+        const body = JSON.parse(data);
+        const included = (body.included || []).slice(0, 5);
+        res.json({
           status: resp.statusCode,
-          preview: data.slice(0, 600)
+          includedCount: (body.included || []).length,
+          // Show types + key fields of first 5 included objects for debugging
+          includedSample: included.map(o => ({
+            $type: o.$type,
+            entityUrn: o.entityUrn,
+            updateUrn: o.updateUrn,
+            hasActor: !!o.actor,
+            actorName: o.actor && o.actor.name && o.actor.name.text,
+            hasCommentary: !!o.commentary,
+            reactionCount: o.reactionCount,
+            totalCommentCount: o.totalCommentCount
+          }))
         });
-        next();
-      });
+      } catch {
+        res.json({ status: resp.statusCode, raw: data.slice(0, 800) });
+      }
     });
-    r.on('error', err => { results.push({ url: url.split('?')[0], error: err.message }); next(); });
-    r.on('timeout', () => { r.destroy(); results.push({ url, error: 'timeout' }); next(); });
-    r.end();
-  }
-  next();
+  });
+  r.on('error', err => res.json({ error: err.message }));
+  r.on('timeout', () => { r.destroy(); res.json({ error: 'timeout' }); });
+  r.end();
 });
 
 app.post('/scrape', (req, res) => {

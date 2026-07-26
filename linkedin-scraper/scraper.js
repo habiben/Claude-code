@@ -17,6 +17,7 @@ const TRACKED_AGENCIES = [
 
 const MAX_POSTS    = 10;
 const MAX_COMMENTS = 20;
+const POST_URN_RE  = /(urn:li:(?:activity|ugcPost|share):[0-9]+)/;
 
 function buildHeaders(liAt, sessionToken) {
   return {
@@ -62,7 +63,6 @@ function buildSearchUrl(keyword, count) {
   return `/voyager/api/voyagerSearchDashClusters?q=all&count=${count}&origin=GLOBAL_SEARCH_HEADER&query=(keywords:${kw},flagshipSearchIntent:SEARCH_SRP,queryParameters:(resultType:List(CONTENT)),includeFiltersInResponse:false)`;
 }
 
-// Build lookup map from included array
 function buildIncludedMap(included) {
   const map = {};
   for (const obj of (included || [])) {
@@ -71,32 +71,47 @@ function buildIncludedMap(included) {
   return map;
 }
 
-// Resolve author name — tries inline fields and included references
+// Extract plain text from various LinkedIn text container shapes
+function extractText(val) {
+  if (!val) return '';
+  if (typeof val === 'string') return val;
+  if (val.text) return extractText(val.text);
+  if (val.shareCommentary) return extractText(val.shareCommentary);
+  return '';
+}
+
+// Resolve author name from actor, dereferencing via included map
 function resolveAuthorName(actor, map) {
-  if (!actor) return 'Unknown';
+  if (!actor) return null;
 
-  // Inline name
   if (actor.name && actor.name.text) return actor.name.text;
+  if (typeof actor.name === 'string' && actor.name) return actor.name;
 
-  // Reference via *miniProfile or *actor
-  const ref = actor['*miniProfile'] || actor['*actor'];
+  const ref = actor['*miniProfile'] || actor['*actor'] || actor['*person'];
   if (ref && map[ref]) {
     const p = map[ref];
-    const fn = p.firstName || p.localizedFirstName || '';
-    const ln = p.lastName  || p.localizedLastName  || '';
-    if (fn || ln) return `${fn} ${ln}`.trim();
     if (p.name && p.name.text) return p.name.text;
-  }
-
-  // Nested miniProfile
-  if (actor.miniProfile) {
-    const p = actor.miniProfile;
     const fn = p.firstName || p.localizedFirstName || '';
     const ln = p.lastName  || p.localizedLastName  || '';
     if (fn || ln) return `${fn} ${ln}`.trim();
   }
 
-  return 'Unknown';
+  const mp = actor.miniProfile || actor.profile;
+  if (mp) {
+    if (mp.name && mp.name.text) return mp.name.text;
+    const fn = mp.firstName || mp.localizedFirstName || '';
+    const ln = mp.lastName  || mp.localizedLastName  || '';
+    if (fn || ln) return `${fn} ${ln}`.trim();
+  }
+
+  if (actor.entityUrn && map[actor.entityUrn]) {
+    const p = map[actor.entityUrn];
+    const fn = p.firstName || p.localizedFirstName || '';
+    const ln = p.lastName  || p.localizedLastName  || '';
+    if (fn || ln) return `${fn} ${ln}`.trim();
+  }
+
+  return null;
 }
 
 function extractUrnsFromBody(body) {
@@ -114,51 +129,99 @@ function extractUrnsFromBody(body) {
   return [...new Set(urns)];
 }
 
-// Extract posts directly from search response (included array)
+function postFromObj(obj, map, keyword) {
+  const actor  = obj.actor || obj.author || {};
+  const author = resolveAuthorName(actor, map) || 'Unknown';
+
+  const text = extractText(obj.commentary) ||
+               extractText(obj.message)    ||
+               extractText(obj.description)||
+               extractText(obj.title)      || '';
+
+  const social   = (obj.socialDetail && obj.socialDetail.totalSocialActivityCounts) || obj.socialDetail || {};
+  const likes    = obj.reactionCount     || social.numLikes    || social.numReactions || 0;
+  const comments = obj.totalCommentCount || social.numComments || 0;
+  const shares   = social.numShares || 0;
+
+  const createdAt = obj.createdAt
+    ? new Date(obj.createdAt).toISOString()
+    : (obj.created && obj.created.time ? new Date(obj.created.time).toISOString() : null);
+
+  const relTime  = (actor.subDescription && actor.subDescription.text) || '';
+
+  // Find activity URN from entityUrn or update-pointer fields
+  const urnSource = [obj.entityUrn, obj.updateUrn, obj.trackingUrn].filter(Boolean).join(' ');
+  const m = urnSource.match(POST_URN_RE);
+  if (!m) return null;
+  const urn = m[1];
+
+  const fullText = `${author} ${text}`.toLowerCase();
+  return {
+    urn,
+    author,
+    text: text.trim(),
+    likes,
+    comments,
+    shares,
+    createdAt,
+    relativeTime: relTime,
+    mentionedAgencies: TRACKED_AGENCIES.filter(a => fullText.includes(a.toLowerCase())),
+    url: `https://www.linkedin.com/feed/update/${encodeURIComponent(urn)}`,
+    matchedKeyword: keyword,
+    commentsList: []
+  };
+}
+
+// Extract posts from search response included array.
+// LinkedIn search uses SearchFeedUpdate objects (not UpdateV2), so we match
+// on structure — actor present + post URN reachable — instead of $type.
 function extractPostsFromSearch(body, keyword) {
   const included = body.included || [];
-  const map = buildIncludedMap(included);
-  const posts = [];
-  const seen = new Set();
+  const map      = buildIncludedMap(included);
+  const posts    = [];
+  const seen     = new Set();
 
   for (const obj of included) {
-    const type = obj && obj['$type'] ? obj['$type'] : '';
-    if (!type.includes('UpdateV2') && !type.includes('FeedUpdate')) continue;
+    if (!obj || typeof obj !== 'object') continue;
+    if (!obj.actor && !obj.author) continue;
 
-    // Get activity URN
-    const rawUrn = obj.entityUrn || obj.updateUrn || '';
-    const m = rawUrn.match(/(urn:li:(?:activity|ugcPost|share):[0-9]+)/);
+    const urnSource = [obj.entityUrn, obj.updateUrn, obj.trackingUrn]
+      .filter(Boolean).join(' ');
+    const m = urnSource.match(POST_URN_RE);
     if (!m) continue;
     const urn = m[1];
     if (seen.has(urn)) continue;
     seen.add(urn);
 
-    const actor      = obj.actor || {};
-    const author     = resolveAuthorName(actor, map);
-    const commentary = obj.commentary || (obj.specificContent && obj.specificContent['com.linkedin.ugc.ShareContent']) || {};
-    const text       = (commentary.text && commentary.text.text) || (commentary.shareCommentary && commentary.shareCommentary.text) || (obj.message && obj.message.text) || '';
-    const social     = (obj.socialDetail && obj.socialDetail.totalSocialActivityCounts) || obj.socialDetail || {};
-    const createdAt  = obj.createdAt ? new Date(obj.createdAt).toISOString() : null;
-    const relTime    = (actor.subDescription && actor.subDescription.text) || '';
-    const fullText   = `${author} ${text}`.toLowerCase();
-
-    posts.push({
-      urn,
-      author,
-      text: text.trim(),
-      likes:    social.numLikes    || social.numReactions || 0,
-      comments: social.numComments || 0,
-      shares:   social.numShares   || 0,
-      createdAt,
-      relativeTime: relTime,
-      mentionedAgencies: TRACKED_AGENCIES.filter(a => fullText.includes(a.toLowerCase())),
-      url: `https://www.linkedin.com/feed/update/${encodeURIComponent(urn)}`,
-      matchedKeyword: keyword,
-      commentsList: []
-    });
+    const post = postFromObj(obj, map, keyword);
+    if (post) posts.push(post);
   }
 
   return posts;
+}
+
+// Fetch a single post and extract its data from the response's included array
+async function fetchPost(urn, creds, keyword) {
+  try {
+    const { status, body } = await liGet(
+      `/voyager/api/feed/updates/${encodeURIComponent(urn)}`, creds
+    );
+    if (status !== 200 || typeof body !== 'object') return null;
+
+    const included   = body.included || [];
+    const map        = buildIncludedMap(included);
+    const activityId = urn.split(':').pop(); // numeric ID portion
+
+    for (const obj of included) {
+      if (!obj) continue;
+      const objUrn = String(obj.entityUrn || '');
+      if (!objUrn.includes(activityId)) continue;
+      if (!obj.actor && !obj.author) continue;
+      const post = postFromObj(obj, map, keyword);
+      if (post) return post;
+    }
+    return null;
+  } catch { return null; }
 }
 
 async function fetchComments(urn, creds) {
@@ -169,10 +232,10 @@ async function fetchComments(urn, creds) {
     if (status !== 200 || typeof body !== 'object') return [];
     const map = buildIncludedMap(body.included);
     return (body.elements || []).reduce((acc, el) => {
-      const text = (el.comment && el.comment.text) || (el.message && el.message.text) || '';
+      const text = extractText(el.comment) || extractText(el.message) || '';
       if (!text) return acc;
       acc.push({
-        author: resolveAuthorName(el.commenter || el.actor || {}, map),
+        author: resolveAuthorName(el.commenter || el.actor || {}, map) || 'Unknown',
         text: text.trim(),
         likes: (el.socialDetail && el.socialDetail.totalSocialActivityCounts && el.socialDetail.totalSocialActivityCounts.numLikes) || 0,
         time: el.createdAt ? new Date(el.createdAt).toISOString() : null
@@ -201,24 +264,44 @@ async function scrapeLinkedIn({ liAt, jsessionid, extraKeywords = [], onProgress
         continue;
       }
 
-      // Extract posts from search response included array
-      const posts = extractPostsFromSearch(body, keyword);
+      // Strategy 1: extract directly from search included array
+      const searchPosts = extractPostsFromSearch(body, keyword);
+      const freshSearch = searchPosts.filter(p => !seenUrns.has(p.urn));
 
-      // Fall back to URN extraction if included gave nothing
-      const urns = posts.length > 0 ? posts.map(p => p.urn) : extractUrnsFromBody(body);
-      const fresh = urns.filter(u => !seenUrns.has(u));
-      fresh.forEach(u => seenUrns.add(u));
-      onProgress && onProgress({ type: 'found', keyword, count: fresh.length });
+      if (freshSearch.length > 0) {
+        freshSearch.forEach(p => seenUrns.add(p.urn));
+        onProgress && onProgress({ type: 'found', keyword, count: freshSearch.length });
 
-      for (const post of posts.filter(p => fresh.includes(p.urn))) {
-        if (post.comments > 0) {
-          await sleep(400);
-          post.commentsList = await fetchComments(post.urn, creds);
+        for (const post of freshSearch) {
+          if (post.comments > 0) {
+            await sleep(400);
+            post.commentsList = await fetchComments(post.urn, creds);
+          }
+          const full = Object.assign({}, post, { isExtra });
+          allPosts.push(full);
+          onProgress && onProgress({ type: 'post', post: full });
+          await sleep(300);
         }
-        const full = Object.assign({}, post, { isExtra });
-        allPosts.push(full);
-        onProgress && onProgress({ type: 'post', post: full });
-        await sleep(300);
+      } else {
+        // Strategy 2: extract URNs, fetch each post individually
+        const urns  = extractUrnsFromBody(body);
+        const fresh = urns.filter(u => !seenUrns.has(u)).slice(0, MAX_POSTS);
+        fresh.forEach(u => seenUrns.add(u));
+        onProgress && onProgress({ type: 'found', keyword, count: fresh.length });
+
+        for (const urn of fresh) {
+          await sleep(400);
+          const post = await fetchPost(urn, creds, keyword);
+          if (!post) continue;
+          if (post.comments > 0) {
+            await sleep(400);
+            post.commentsList = await fetchComments(urn, creds);
+          }
+          const full = Object.assign({}, post, { isExtra });
+          allPosts.push(full);
+          onProgress && onProgress({ type: 'post', post: full });
+          await sleep(300);
+        }
       }
     } catch (err) {
       onProgress && onProgress({ type: 'error_msg', keyword, message: err.message });
