@@ -984,7 +984,13 @@
       const catGrid = document.getElementById('manadensCategories');
       const colors = ['#6366f1', '#f59e0b', '#22c55e', '#ef4444', '#818cf8'];
 
-      catGrid.innerHTML = data.categories.map((cat, i) => {
+      const sortedCats = [...data.categories].sort((a, b) => {
+        const da = a.nextDeadline ? new Date(a.nextDeadline) : new Date('9999-12-31');
+        const db = b.nextDeadline ? new Date(b.nextDeadline) : new Date('9999-12-31');
+        return da - db;
+      });
+
+      catGrid.innerHTML = sortedCats.map((cat, i) => {
         const s = getDeadlineStatus(cat.nextDeadline);
         return `
           <div class="manadens-cat-card" style="animation-delay:${i * 80}ms;border-top:3px solid ${colors[i % colors.length]}">

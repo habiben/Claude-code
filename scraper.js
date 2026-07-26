@@ -346,7 +346,7 @@ function parseByratoppen(html) {
   }));
 }
 
-// Parse a category page for top list
+// Parse a category page for top list and deadline
 function parseCategoryTopList(html, categoryName) {
   const results = [];
   const text = stripHtml(html);
@@ -371,7 +371,45 @@ function parseCategoryTopList(html, categoryName) {
     if (results.length > 0) break;
   }
 
-  return { category: categoryName, topList: results.slice(0, 10) };
+  // Extract deadline date from the page
+  let deadline = null;
+  let deadlineDisplay = null;
+
+  // Swedish month names for parsing
+  const svMonths = {
+    'januari': '01', 'februari': '02', 'mars': '03', 'april': '04',
+    'maj': '05', 'juni': '06', 'juli': '07', 'augusti': '08',
+    'september': '09', 'oktober': '10', 'november': '11', 'december': '12'
+  };
+
+  // Pattern: "deadline", "sista dag", "skicka in", "bidrag senast" near a date
+  const deadlinePatterns = [
+    /(?:deadline|sista\s*dag|skicka\s*in|bidrag\s*senast|sista\s*inlämning)[:\s]*(\d{1,2})\s+(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)\s*(\d{4})?/gi,
+    /(\d{1,2})\s+(januari|februari|mars|april|maj|juni|juli|augusti|september|oktober|november|december)\s*(\d{4})?/gi,
+    /(\d{4})-(\d{2})-(\d{2})/g
+  ];
+
+  for (const pattern of deadlinePatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      if (match[0].includes('-') && match[0].length === 10) {
+        deadline = match[0];
+        deadlineDisplay = match[0];
+      } else {
+        const day = match[1].padStart(2, '0');
+        const monthName = match[2].toLowerCase();
+        const month = svMonths[monthName];
+        const year = match[3] || new Date().getFullYear().toString();
+        if (month) {
+          deadline = `${year}-${month}-${day}`;
+          deadlineDisplay = `${match[1]} ${match[2]} ${year}`;
+        }
+      }
+      break;
+    }
+  }
+
+  return { category: categoryName, topList: results.slice(0, 10), deadline, deadlineDisplay };
 }
 
 async function scrapeManadens() {
@@ -489,6 +527,21 @@ function updateDataJs(manadensResult) {
   } else {
     console.log('\n  WARNING: Could not find leaderboard array in data.js');
     return false;
+  }
+
+  // Update category deadlines from scraped data
+  if (manadensResult.categoryTopLists && manadensResult.categoryTopLists.length > 0) {
+    for (const cat of manadensResult.categoryTopLists) {
+      if (cat.deadline) {
+        const deadlineRegex = new RegExp(
+          `(id:\\s*"${cat.id}"[\\s\\S]*?nextDeadline:\\s*")([^"]*)(")`,
+        );
+        if (deadlineRegex.test(content)) {
+          content = content.replace(deadlineRegex, `$1${cat.deadline}$3`);
+          console.log(`  Updated ${cat.id} deadline: ${cat.deadline}`);
+        }
+      }
+    }
   }
 
   // Update lastUpdated date
