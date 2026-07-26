@@ -66,9 +66,20 @@
       background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
       pointer-events: none;
     }
+    .site-logo {
+      width: clamp(100px, 20vw, 160px);
+      height: auto;
+      filter: invert(1);
+      position: relative;
+      margin-bottom: 0.25rem;
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) .site-logo { filter: none; }
+    }
+    :root[data-theme="light"] .site-logo { filter: none; }
     .site-title {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
       font-weight: 300;
       letter-spacing: 0.06em;
       background: linear-gradient(135deg, #6366f1, #818cf8, #a78bfa);
@@ -630,6 +641,7 @@
 
   <!-- HEADER -->
   <header class="header">
+    <img src="logo.jpeg" alt="ÅHwards" class="site-logo">
     <h1 class="site-title">ÅHwards</h1>
     <p>Submission deadlines, fees & resources for the world's biggest advertising award shows</p>
     <div class="header-actions">
