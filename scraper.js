@@ -120,15 +120,12 @@ const SOURCES = [
 const MANADENS_PAGES = {
   byratoppen: 'https://www.resume.se/manadens-kampanj/',
   categories: [
-    { id: 'film',     name: 'Månadens Film',    url: 'https://www.resume.se/manadens-kampanj/film/' },
-    { id: 'print',    name: 'Månadens Print',   url: 'https://www.resume.se/manadens-kampanj/print/' },
-    { id: 'utomhus',  name: 'Månadens Utomhus', url: 'https://www.resume.se/manadens-kampanj/utomhus/' },
-    { id: 'design',   name: 'Månadens Design',  url: 'https://www.resume.se/manadens-kampanj/design/' },
-    { id: 'ide',      name: 'Månadens Idé',     url: 'https://www.resume.se/manadens-kampanj/ide/' },
-    { id: 'content',  name: 'Månadens Content', url: 'https://www.resume.se/manadens-kampanj/content/' },
-    { id: 'pr',       name: 'Månadens PR',      url: 'https://www.resume.se/manadens-kampanj/pr/' },
-    { id: 'digital',  name: 'Månadens Digital', url: 'https://www.resume.se/manadens-kampanj/digital/' },
-    { id: 'audio',    name: 'Månadens Audio',   url: 'https://www.resume.se/manadens-kampanj/audio/' }
+    { id: 'film',      name: 'Månadens Film',      url: 'https://www.resume.se/manadens-kampanj/film/' },
+    { id: 'hantverk',  name: 'Månadens Hantverk',  url: 'https://www.resume.se/manadens-kampanj/hantverk/' },
+    { id: 'ide',       name: 'Månadens Idé',       url: 'https://www.resume.se/manadens-kampanj/ide/' },
+    { id: 'politik',   name: 'Månadens Politik',   url: 'https://www.resume.se/manadens-kampanj/politik/' },
+    { id: 'print',     name: 'Månadens Print',     url: 'https://www.resume.se/manadens-kampanj/print/' },
+    { id: 'utomhus',   name: 'Månadens Utomhus',   url: 'https://www.resume.se/manadens-kampanj/utomhus/' }
   ]
 };
 
