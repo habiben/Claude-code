@@ -402,16 +402,16 @@ window.MANADENS_DATA = {
     description: "Poäng per placering: 1:a = 5p, 2:a = 3p, 3:a = 1p. Totalställningen summeras över årets alla omgångar."
   },
   leaderboard: [
-    { rank: 1, agency: "Åkestam Holst", points: 327, wins: 0, podiums: 0 },
+    { rank: 1, agency: "Åkestam Holst", points: 327, wins: 2, podiums: 5 },
     { rank: 2, agency: "Nord", points: 282, wins: 0, podiums: 0 },
-    { rank: 3, agency: "Forsman & Bodenfors", points: 264, wins: 0, podiums: 0 },
+    { rank: 3, agency: "Forsman & Bodenfors", points: 264, wins: 1, podiums: 3 },
     { rank: 4, agency: "Volvo Cars inhouse", points: 159, wins: 0, podiums: 0 },
-    { rank: 5, agency: "Save Our Souls", points: 132, wins: 0, podiums: 0 },
+    { rank: 5, agency: "Save Our Souls", points: 132, wins: 1, podiums: 1 },
     { rank: 6, agency: "BBDO Nordics", points: 99, wins: 0, podiums: 0 },
     { rank: 7, agency: "Knak", points: 90, wins: 0, podiums: 0 },
     { rank: 8, agency: "Kontiki", points: 48, wins: 0, podiums: 0 },
     { rank: 8, agency: "Rio Pictures", points: 48, wins: 0, podiums: 0 },
-    { rank: 8, agency: "Differ Agency", points: 48, wins: 0, podiums: 0 },
+    { rank: 8, agency: "Differ Agency", points: 48, wins: 0, podiums: 1 },
     { rank: 11, agency: "Qvennerstedt Eghammer Malm", points: 45, wins: 0, podiums: 0 },
     { rank: 12, agency: "Kid collective", points: 27, wins: 0, podiums: 0 },
     { rank: 13, agency: "Stendahls", points: 24, wins: 0, podiums: 0 },
@@ -419,8 +419,8 @@ window.MANADENS_DATA = {
     { rank: 15, agency: "Rocket-Science", points: 9, wins: 0, podiums: 0 },
     { rank: 15, agency: "Spöket", points: 9, wins: 0, podiums: 0 },
     { rank: 15, agency: "Dear Friends", points: 9, wins: 0, podiums: 0 },
-    { rank: 15, agency: "First Lady Agency", points: 9, wins: 0, podiums: 0 }
+    { rank: 15, agency: "First Lady Agency", points: 9, wins: 0, podiums: 1 }
   ],
-  lastUpdated: "2026-07-26",
+  lastUpdated: "2026-07-27",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
