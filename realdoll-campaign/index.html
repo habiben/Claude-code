@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REAL DOLL — En kampanj från Talita</title>
+<meta name="description" content="Talita presenterar The Real Doll — en symbol för sexhandelns allt våldsammare verklighet.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="cursor-blob" id="cursorBlob"><span>Se</span></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="siteNav">
+  <div class="nav-inner">
+    <a href="#hero" class="brand">
+      <span class="brand-org">TALITA PRESENTERAR</span>
+      <span class="brand-name">REAL DOLL</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#verkligheten" data-nav>Verkligheten</a>
+      <a href="#kampanjen" data-nav>Kampanjen</a>
+      <a href="#talita" data-nav>Om Talita</a>
+      <a href="#stod" data-nav>Stöd oss</a>
+    </nav>
+    <a href="#stod" class="nav-cta">Stöd Talita</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Öppna meny">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#verkligheten" data-nav>Verkligheten</a>
+  <a href="#kampanjen" data-nav>Kampanjen</a>
+  <a href="#talita" data-nav>Om Talita</a>
+  <a href="#stod" data-nav>Stöd oss</a>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-heading">
+      <span class="hero-badge"><span class="dot"></span> En symbol för sexhandelns verklighet</span>
+      <h1 class="hero-title">
+        <span class="t1">Real</span><span class="t2">Doll</span>
+      </h1>
+      <p class="hero-sub">En symbol för sexhandelns allt våldsammare verklighet</p>
+    </div>
+
+    <div class="hero-stage">
+      <div class="vitrine">
+        <div class="vitrine-top"></div>
+        <div class="vitrine-glass"></div>
+        <div class="vitrine-plate"></div>
+        <div class="vitrine-base"></div>
+      </div>
+
+      <div class="figure" aria-hidden="true">
+        <div class="figure-part figure-leg-l"></div>
+        <div class="figure-part figure-leg-r"></div>
+        <div class="figure-part figure-hips"></div>
+        <div class="mark mark-thigh"></div>
+        <div class="mark mark-knee"></div>
+        <div class="figure-part figure-arm-l"></div>
+        <div class="figure-part figure-arm-r"></div>
+        <div class="figure-part figure-torso"></div>
+        <div class="mark mark-belly"></div>
+        <div class="figure-part figure-head"></div>
+        <div class="figure-hair"></div>
+      </div>
+
+      <div class="hotspots">
+        <button class="hotspot hotspot-face" data-num="01" data-target="panel-face" aria-label="Ansiktet — osynliga skador">
+          <span class="hotspot-ring"></span><span class="hotspot-dot"></span>
+        </button>
+        <button class="hotspot hotspot-belly" data-num="02" data-target="panel-belly" aria-label="Buken — interna skador">
+          <span class="hotspot-ring"></span><span class="hotspot-dot"></span>
+        </button>
+        <button class="hotspot hotspot-thigh" data-num="03" data-target="panel-thigh" aria-label="Låret — blåmärken">
+          <span class="hotspot-ring"></span><span class="hotspot-dot"></span>
+        </button>
+        <button class="hotspot hotspot-knee" data-num="04" data-target="panel-knee" aria-label="Benet — märken efter grepp">
+          <span class="hotspot-ring"></span><span class="hotspot-dot"></span>
+        </button>
+      </div>
+    </div>
+
+    <p class="hero-hint">Rör vid kroppen för att se det som annars göms under kläderna.</p>
+  </div>
+
+  <div class="hero-scroll-cue">
+    <span>Scrolla</span>
+    <i></i>
+  </div>
+</section>
+
+<!-- info panels (positioned by JS relative to their hotspot) -->
+<div class="info-panel" id="panel-face" data-hotspot="hotspot-face">
+  <button class="info-panel-close" data-close>✕</button>
+  <span class="info-panel-tag">01 — Ansiktet</span>
+  <h3 class="info-panel-title">De osynliga skadorna</h3>
+  <p class="info-panel-body">Inte alla skador syns utanpå. Psykisk traumatisering, dissociation och skam är sår som ofta sitter kvar längst — långt efter att de synliga märkena har läkt.</p>
+  <div class="info-panel-media">
+    <button class="info-panel-play" aria-label="Spela vittnesmål"><svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg></button>
+    <span class="info-panel-media-caption">Vittnesmål — video</span>
+  </div>
+</div>
+
+<div class="info-panel" id="panel-belly" data-hotspot="hotspot-belly">
+  <button class="info-panel-close" data-close>✕</button>
+  <span class="info-panel-tag">02 — Buken</span>
+  <h3 class="info-panel-title">Interna skador</h3>
+  <p class="info-panel-body">Sparkar och slag mot buken kan orsaka interna blödningar som inte syns utanpå kroppen — skador som kvinnorna vi möter sällan söker vård för.</p>
+  <div class="info-panel-media">
+    <button class="info-panel-play" aria-label="Spela vittnesmål"><svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg></button>
+    <span class="info-panel-media-caption">Vittnesmål — video</span>
+  </div>
+</div>
+
+<div class="info-panel" id="panel-thigh" data-hotspot="hotspot-thigh">
+  <button class="info-panel-close" data-close>✕</button>
+  <span class="info-panel-tag">03 — Låret</span>
+  <h3 class="info-panel-title">Blåmärken</h3>
+  <p class="info-panel-body">Blåmärken efter hårda grepp och slag är vanligt förekommande bland kvinnorna vi träffar — och beskrivs allt oftare som en del av det köparna anser sig ha rätt till.</p>
+  <div class="info-panel-media">
+    <button class="info-panel-play" aria-label="Spela vittnesmål"><svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg></button>
+    <span class="info-panel-media-caption">Vittnesmål — video</span>
+  </div>
+</div>
+
+<div class="info-panel" id="panel-knee" data-hotspot="hotspot-knee">
+  <button class="info-panel-close" data-close>✕</button>
+  <span class="info-panel-tag">04 — Benet</span>
+  <h3 class="info-panel-title">Stryptag &amp; grepp</h3>
+  <p class="info-panel-body">Hårda grepp och stryptag lämnar spår som kvinnorna ofta bär i det tysta. Våldet har normaliserats — männen anser sig ha frihet att göra vad som helst eftersom de har betalat.</p>
+  <div class="info-panel-media">
+    <button class="info-panel-play" aria-label="Spela vittnesmål"><svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg></button>
+    <span class="info-panel-media-caption">Vittnesmål — video</span>
+  </div>
+</div>
+
+<!-- ============ VERKLIGHETEN ============ -->
+<section class="section" id="verkligheten">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Verkligheten</span>
+        <h2 class="section-title">Våldet har <em>normaliserats.</em></h2>
+      </div>
+      <p class="section-kicker">Kvinnor i prostitution i Sverige vittnar om ett ökat och allt grövre fysiskt våld från de män som betalar för sex.</p>
+    </div>
+
+    <div class="statement-grid">
+      <div class="statement-col statement-col-text">
+        <p class="reveal">Kvinnor i prostitution i Sverige vittnar om ökat fysiskt våld hos de män som betalar för sex. Knytnävslag, stryptag, sparkar och sexuella övergrepp blir allt vanligare — en mörkt eskalerande trend som lämnar offren i en snudd på obegriplig utsatt situation.</p>
+        <p class="reveal">”Våldet har normaliserats de senaste åren. Männen anser att de har frihet att göra vad som helst eftersom de har betalat för övergreppet. Kvinnorna vi träffar kan ha allt från bitmärken till blåmärken, och interna blödningar. Objektifieringen av dessa kvinnor har nått nya fruktansvärda höjder.”</p>
+      </div>
+    </div>
+
+    <div class="pull-quote reveal">
+      <span class="mark-glyph">”</span>
+      <blockquote>Objektifieringen av dessa kvinnor har nått nya fruktansvärda höjder.</blockquote>
+      <cite>Anna Sander</cite>
+    </div>
+
+    <div class="type-strip reveal">
+      <div class="type-track">
+        <span>Knytnävslag</span><span>Stryptag</span><span>Sparkar</span><span>Sexuella övergrepp</span><span>Interna blödningar</span><span>Blåmärken</span>
+        <span>Knytnävslag</span><span>Stryptag</span><span>Sparkar</span><span>Sexuella övergrepp</span><span>Interna blödningar</span><span>Blåmärken</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KAMPANJEN ============ -->
+<section class="section section-alt" id="kampanjen">
+  <div class="wrap">
+    <div class="campaign-layout">
+      <div class="campaign-visual reveal">
+        <div class="figure figure-mini" aria-hidden="true">
+          <div class="figure-part figure-leg-l"></div>
+          <div class="figure-part figure-leg-r"></div>
+          <div class="figure-part figure-hips"></div>
+          <div class="mark mark-thigh"></div>
+          <div class="mark mark-knee"></div>
+          <div class="figure-part figure-arm-l"></div>
+          <div class="figure-part figure-arm-r"></div>
+          <div class="figure-part figure-torso"></div>
+          <div class="mark mark-belly"></div>
+          <div class="figure-part figure-head"></div>
+          <div class="figure-hair"></div>
+        </div>
+      </div>
+      <div class="campaign-text reveal">
+        <span class="eyebrow">Kampanjen</span>
+        <p class="lede">”Talita presenterar The Real Doll” — en sexdocka som visar de vanliga fysiska skadorna vid sexköp i Sverige.</p>
+        <p>Såren är anatomiskt korrekta, hämtade från aktuell statistik från akutjourer, kriscenter och egna vittnesmål från kvinnor som tvingats in i prostitution mot deras egen vilja.</p>
+        <p>The Real Doll är ett sätt att åskådliggöra ett nytt beteende hos svenska sexköpare — på-hejat av en fortsatt objektifiering av kvinnor, en total avsaknad av empati, och en allmänt urspårad toxisk maskulinitet genomgående i samhället.</p>
+        <p>Syftet är att lyfta utsatta kvinnors faktiska situation i det mediala ljuset, för att skapa en öppnare och mer konstruktiv debatt om prostitutionens konsekvenser.</p>
+
+        <div class="fact-row">
+          <div class="fact-cell">
+            <h4>Anatomiskt korrekt</h4>
+            <p>Skadorna är hämtade från verklig statistik och vittnesmål.</p>
+          </div>
+          <div class="fact-cell">
+            <h4>Ett ställningstagande</h4>
+            <p>Ett verk som gör ont att titta på — och omöjligt att bortse från.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OM TALITA ============ -->
+<section class="section" id="talita">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Om Talita</span>
+        <h2 class="section-title">En väg <em>ut.</em></h2>
+      </div>
+      <p class="section-kicker">Talita är den organisation som ligger bakom The Real Doll.</p>
+    </div>
+
+    <div class="talita-section">
+      <div class="talita-copy reveal">
+        <p>Talita är en svensk stiftelse som arbetar för att kvinnor ska kunna lämna prostitution, människohandel och sexuell exploatering. Genom boende, terapeutiskt stöd och praktisk hjälp erbjuder Talita en väg tillbaka till ett självständigt liv.</p>
+        <p>The Real Doll är en del av Talitas arbete med att sätta ljus på den verklighet många av kvinnorna i deras verksamhet bär med sig — en verklighet som sällan syns utåt, men som finns där, under ytan.</p>
+      </div>
+      <div class="talita-stats reveal">
+        <div class="talita-stat">
+          <b>01</b>
+          <span>Boende och skyddat stöd för kvinnor som lämnar prostitution och människohandel.</span>
+        </div>
+        <div class="talita-stat">
+          <b>02</b>
+          <span>Terapeutiskt och praktiskt stöd på vägen mot ett självständigt liv.</span>
+        </div>
+        <div class="talita-stat">
+          <b>03</b>
+          <span>Opinionsbildning för att synliggöra våldet bakom sexhandeln.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA / STÖD ============ -->
+<section class="cta-section" id="stod">
+  <div class="cta-bg-glow"></div>
+  <div class="wrap">
+    <span class="eyebrow">Titta inte bort</span>
+    <h2 class="cta-title reveal">Se. Reagera.<br>Agera.</h2>
+    <p class="cta-body reveal">The Real Doll är en kampanj som gör ont att titta på, men som är omöjligt att bortse från. Och tyvärr är det just det som behövs.</p>
+    <div class="cta-actions reveal">
+      <a href="#" class="btn btn-solid">Stöd Talita</a>
+      <a href="#" class="btn btn-ghost">Dela kampanjen</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> Talita — The Real Doll</span>
+    <div class="footer-links">
+      <a href="#hero">Till toppen</a>
+      <a href="#">Presskontakt</a>
+      <a href="#">Integritetspolicy</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
