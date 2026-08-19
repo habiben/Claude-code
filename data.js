@@ -326,6 +326,32 @@ window.AWARDS_DATA = [
       { label: "Competition Guide (PDF)", url: "https://100wattaren.se/wp-content/uploads/2025/09/100-wattaren-Tavlingsguide-2025.pdf", type: "rulebook" },
       { label: "Sveriges Annonsörer", url: "https://www.sverigesannonsorer.se/", type: "entryguide" }
     ]
+  },
+  {
+    id: "swedish-content-awards",
+    name: "Swedish Content Awards",
+    organization: "Komm (Sveriges Kommunikationsbyråer)",
+    color: "#E056A0",
+    website: "https://komm.se/tavlingar/content-awards/",
+    year: 2026,
+    location: "Stockholm, Sweden",
+    eventDates: "October 2026 (Gala)",
+    deadlines: [
+      { label: "Entries Open", date: "2026-06-07", displayDate: "June 7, 2026" },
+      { label: "Early Bird Ends", date: "2026-07-31", displayDate: "July 31, 2026" },
+      { label: "Final Deadline", date: "2026-09-08", displayDate: "September 8, 2026" }
+    ],
+    fees: [
+      { tier: "Early Bird (Members)", amount: "3 500 kr", note: "Before July 31, excl. moms" },
+      { tier: "Early Bird (Non-members)", amount: "5 000 kr", note: "Before July 31, excl. moms" },
+      { tier: "Regular (Members)", amount: "3 950 kr", note: "Per entry, excl. moms" },
+      { tier: "Regular (Non-members)", amount: "5 450 kr", note: "Per entry, excl. moms" }
+    ],
+    resources: [
+      { label: "Competition Info", url: "https://komm.se/tavlingar/content-awards/", type: "entryguide" },
+      { label: "Categories & Rules", url: "https://swedishcontentawards.com/kategorier-och-regler/", type: "rulebook" },
+      { label: "Enter via Komm", url: "https://komm.awardsplatform.com/page/GBABWNLN", type: "entryguide" }
+    ]
   }
 ];
 
