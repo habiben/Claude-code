@@ -20,6 +20,7 @@
       <span class="brand-name">REAL DOLL</span>
     </a>
     <nav class="nav-links" id="navLinks">
+      <a href="#film" data-nav>Filmen</a>
       <a href="#verkligheten" data-nav>Verkligheten</a>
       <a href="#kampanjen" data-nav>Kampanjen</a>
       <a href="#talita" data-nav>Om Talita</a>
@@ -33,11 +34,40 @@
 </header>
 
 <div class="mobile-menu" id="mobileMenu">
+  <a href="#film" data-nav>Filmen</a>
   <a href="#verkligheten" data-nav>Verkligheten</a>
   <a href="#kampanjen" data-nav>Kampanjen</a>
   <a href="#talita" data-nav>Om Talita</a>
   <a href="#stod" data-nav>Stöd oss</a>
 </div>
+
+<!-- ============ FILMEN (16:9 video, opens the story before the interactive doll) ============ -->
+<section class="film-section" id="film">
+  <div class="wrap film-head reveal">
+    <span class="eyebrow">Talita presenterar</span>
+    <h2 class="film-title">Innan du rör vid henne — <em>se filmen.</em></h2>
+    <p class="film-sub">Ett kort vittnesmål om vad som döljs under ytan när en kropp säljs. Sen möter du The Real Doll.</p>
+  </div>
+
+  <div class="film-frame-wrap reveal">
+    <div class="film-frame" id="filmFrame" role="button" tabindex="0" aria-label="Spela upp kampanjfilmen">
+      <div class="film-frame-glow"></div>
+      <div class="film-poster"></div>
+      <video class="film-video" id="filmVideo" playsinline preload="none">
+        <!-- Lägg riktig kampanjfilm här: <source src="assets/kampanjfilm.mp4" type="video/mp4"> -->
+      </video>
+      <div class="film-play">
+        <span class="film-play-btn">
+          <svg width="20" height="24" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>
+        </span>
+      </div>
+    </div>
+    <div class="film-caption">
+      <span><b>Kampanjfilm</b> — Talita &amp; The Real Doll</span>
+      <span>01:24</span>
+    </div>
+  </div>
+</section>
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="hero">

@@ -81,6 +81,42 @@
     revealEls.forEach((el) => revealObserver.observe(el));
   }
 
+  /* ---------- film section: play / pause the 16:9 video ---------- */
+  const filmFrame = document.getElementById('filmFrame');
+  const filmVideo = document.getElementById('filmVideo');
+
+  function toggleFilm() {
+    if (!filmFrame) return;
+    const hasSource = filmVideo && filmVideo.querySelector('source');
+
+    if (!hasSource) {
+      // no real video file wired up yet — just show the playing state
+      filmFrame.classList.toggle('is-playing');
+      return;
+    }
+
+    if (filmVideo.paused) {
+      filmVideo.play();
+      filmFrame.classList.add('is-playing');
+    } else {
+      filmVideo.pause();
+      filmFrame.classList.remove('is-playing');
+    }
+  }
+
+  if (filmFrame) {
+    filmFrame.addEventListener('click', toggleFilm);
+    filmFrame.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleFilm();
+      }
+    });
+    if (filmVideo) {
+      filmVideo.addEventListener('ended', () => filmFrame.classList.remove('is-playing'));
+    }
+  }
+
   /* ---------- hero hotspots + info panels ---------- */
   const hotspots = document.querySelectorAll('.hotspot');
   const panels = document.querySelectorAll('.info-panel');
