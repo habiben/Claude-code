@@ -128,7 +128,7 @@ window.AWARDS_DATA = [
     eventDates: "September 25 – October 3, 2026 (Judging)",
     deadlines: [
       { label: "Early Bird (35% off)", date: "2026-04-30", displayDate: "April 30, 2026" },
-      { label: "Standard (20% off)", date: "2026-06-10", displayDate: "June 10, 2026" },
+      { label: "Standard (20% off)", date: "2026-06-30", displayDate: "June 30, 2026" },
       { label: "Full Price", date: "2026-07-01", displayDate: "July 1, 2026" }
     ],
     fees: [
