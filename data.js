@@ -11,7 +11,7 @@ window.AWARDS_DATA = [
     website: "https://www.canneslions.com",
     year: 2026,
     location: "Cannes, France",
-    eventDates: "June 15–19, 2026",
+    eventDates: "June 22–26, 2026",
     deadlines: [
       { label: "Entries Open", date: "2026-01-15", displayDate: "January 15, 2026" },
       { label: "First Late Fee", date: "2026-03-05", displayDate: "March 5, 2026" },
@@ -93,22 +93,20 @@ window.AWARDS_DATA = [
     organization: "Clio Awards",
     color: "#E63946",
     website: "https://clios.com/",
-    year: 2026,
+    year: 2027,
     location: "New York, USA",
-    eventDates: "April 2026",
+    eventDates: "May 11, 2027 (Ceremony)",
     deadlines: [
-      { label: "1st Deadline", date: "2025-10-24", displayDate: "October 24, 2025" },
-      { label: "2nd Deadline", date: "2025-12-12", displayDate: "December 12, 2025" },
-      { label: "3rd Deadline", date: "2026-01-16", displayDate: "January 16, 2026" },
-      { label: "Final Deadline", date: "2026-02-06", displayDate: "February 6, 2026" }
+      { label: "1st Deadline", date: "2026-10-23", displayDate: "October 23, 2026" },
+      { label: "2nd Deadline", date: "2026-12-11", displayDate: "December 11, 2026" },
+      { label: "3rd Deadline", date: "2027-01-15", displayDate: "January 15, 2027" },
+      { label: "Final Deadline", date: "2027-02-19", displayDate: "February 19, 2027" }
     ],
     fees: [
-      { tier: "1st Deadline", amount: "$525–$1,025", note: "Single entries" },
-      { tier: "2nd Deadline", amount: "$625–$1,175", note: "Single entries" },
-      { tier: "3rd Deadline", amount: "$750–$1,350", note: "Single entries" },
-      { tier: "Final Deadline", amount: "$800–$1,400", note: "Single entries" },
-      { tier: "Campaign surcharge", amount: "+$75–$400", note: "On top of single entry fee" },
-      { tier: "Student entries", amount: "$50–$75", note: "Single / campaign" }
+      { tier: "1st Deadline", amount: "See clios.com", note: "Lowest rate" },
+      { tier: "2nd Deadline", amount: "See clios.com", note: "Prices increase" },
+      { tier: "3rd Deadline", amount: "See clios.com", note: "Prices increase" },
+      { tier: "Final Deadline", amount: "See clios.com", note: "Highest rate" }
     ],
     resources: [
       { label: "Key Dates", url: "https://clios.com/the-clio-awards/entry-information/key-dates/", type: "entryguide" },
@@ -128,8 +126,8 @@ window.AWARDS_DATA = [
     eventDates: "September 25 – October 3, 2026 (Judging)",
     deadlines: [
       { label: "Early Bird (35% off)", date: "2026-04-30", displayDate: "April 30, 2026" },
-      { label: "Standard (20% off)", date: "2026-06-10", displayDate: "June 10, 2026" },
-      { label: "Full Price", date: "2026-07-01", displayDate: "July 1, 2026" }
+      { label: "Standard (20% off)", date: "2026-06-30", displayDate: "June 30, 2026" },
+      { label: "Full Price (Final)", date: "2026-08-31", displayDate: "August 31, 2026" }
     ],
     fees: [
       { tier: "Early Bird (35% off)", amount: "$406–$975", note: "Ambient, Audio, Radio, etc." },
@@ -149,9 +147,9 @@ window.AWARDS_DATA = [
     website: "https://www.effie-europe.com/",
     year: 2026,
     location: "Europe",
-    eventDates: "October–November 2026",
+    eventDates: "December 3, 2026 (Effie Day)",
     deadlines: [
-      { label: "Entries Open", date: "2026-06-01", displayDate: "June 2026" },
+      { label: "Entries Open", date: "2026-06-03", displayDate: "June 3, 2026" },
       { label: "1st Deadline", date: "2026-07-30", displayDate: "July 30, 2026" },
       { label: "2nd Deadline", date: "2026-08-13", displayDate: "August 13, 2026" },
       { label: "3rd Deadline", date: "2026-08-27", displayDate: "August 27, 2026" },
@@ -257,15 +255,15 @@ window.AWARDS_DATA = [
     location: "Europe",
     eventDates: "November–December 2026",
     deadlines: [
-      { label: "Entries Open", date: "2026-08-13", displayDate: "August 13, 2026" },
-      { label: "Standard Rate Ends", date: "2026-09-18", displayDate: "September 18, 2026" },
-      { label: "2nd Late Fee", date: "2026-10-02", displayDate: "October 2, 2026" },
-      { label: "Final Deadline", date: "2026-10-16", displayDate: "October 16, 2026" }
+      { label: "Entries Open", date: "2026-08-20", displayDate: "August 20, 2026" },
+      { label: "Standard Rate Ends", date: "2026-09-17", displayDate: "September 17, 2026" },
+      { label: "2nd Late Fee", date: "2026-10-01", displayDate: "October 1, 2026" },
+      { label: "Final Deadline", date: "2026-10-15", displayDate: "October 15, 2026" }
     ],
     fees: [
-      { tier: "Standard", amount: "See eurobest.com", note: "Before Sep 18" },
-      { tier: "1st Late Fee", amount: "+surcharge", note: "After Sep 18" },
-      { tier: "2nd Late Fee", amount: "+surcharge", note: "After Oct 2" }
+      { tier: "Standard", amount: "See eurobest.com", note: "Before Sep 17" },
+      { tier: "1st Late Fee", amount: "+surcharge", note: "After Sep 17" },
+      { tier: "2nd Late Fee", amount: "+surcharge", note: "After Oct 1" }
     ],
     resources: [
       { label: "Dates & Fees", url: "https://www.eurobest.com/support/dates-and-fees", type: "entryguide" },
@@ -309,15 +307,15 @@ window.AWARDS_DATA = [
     organization: "Sveriges Annonsörer",
     color: "#F5A623",
     website: "https://100wattaren.se/",
-    year: 2026,
+    year: 2027,
     location: "Stockholm, Sweden",
-    eventDates: "Feb 12, 2026 (Gala, Stadshuset)",
+    eventDates: "Feb 11, 2027 (Gala, Stadshuset)",
     deadlines: [
-      { label: "Entries Open", date: "2025-09-17", displayDate: "September 17, 2025" },
-      { label: "Regular Deadline", date: "2025-10-22", displayDate: "October 22, 2025" },
-      { label: "Extended Deadline (+2000 kr)", date: "2025-10-24", displayDate: "October 24, 2025" },
-      { label: "Nominees Announced", date: "2025-12-09", displayDate: "December 9, 2025" },
-      { label: "Awards Gala", date: "2026-02-12", displayDate: "February 12, 2026" }
+      { label: "Entries Open", date: "2026-09-16", displayDate: "September 16, 2026" },
+      { label: "Regular Deadline", date: "2026-10-21", displayDate: "October 21, 2026" },
+      { label: "Extended Deadline (+2000 kr)", date: "2026-10-23", displayDate: "October 23, 2026" },
+      { label: "Nominees Announced", date: "2026-12-08", displayDate: "December 8, 2026" },
+      { label: "Awards Gala", date: "2027-02-11", displayDate: "February 11, 2027" }
     ],
     fees: [
       { tier: "Regular Entry", amount: "Contact organizer", note: "Per entry" },
