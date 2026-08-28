@@ -398,7 +398,7 @@ window.MANADENS_DATA = {
       deadlineInfo: "Datum ej angivet",
       nextDeadline: "",
       winnerRound: "",
-      topList: [{ rank: 1, agency: "Sosselinjen" }, { rank: 2, agency: "Stoppa hyreschocken" }, { rank: 3, agency: "En enig lokalpolitik i Göteborg" }]
+      topList: [{ rank: 1, agency: "Ebba Busch möter Magdalena Andersson vid färjan i Visby" }, { rank: 2, agency: "SD:s luftballong" }, { rank: 3, agency: "Socialdemokraternas valaffischer på bondska" }]
     },
     {
       id: "print",
@@ -445,6 +445,6 @@ window.MANADENS_DATA = {
     { rank: 15, agency: "Dear Friends", points: 9, wins: 0, podiums: 0 },
     { rank: 15, agency: "First Lady Agency", points: 9, wins: 0, podiums: 1 }
   ],
-  lastUpdated: "2026-08-27",
+  lastUpdated: "2026-08-28",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
