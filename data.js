@@ -368,27 +368,27 @@ window.MANADENS_DATA = {
       id: "film",
       name: "Månadens Film",
       description: "Bästa reklamfilm – TV, online, sociala medier",
-      deadlineInfo: "juni-augusti-omgången",
-      nextDeadline: "2026-08-31",
-      winnerRound: "Maj",
+      deadlineInfo: "september-omgången",
+      nextDeadline: "2026-09-30",
+      winnerRound: "Juni - Augusti",
       topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Volvo Cars" }, { rank: 3, agency: "First Lady Agency" }]
     },
     {
       id: "hantverk",
       name: "Månadens Hantverk",
       description: "Bästa hantverk – craft, produktion, utförande",
-      deadlineInfo: "maj-augusti-omgången",
-      nextDeadline: "2026-08-31",
-      winnerRound: "Februari - April",
+      deadlineInfo: "september-november-omgången",
+      nextDeadline: "2026-11-30",
+      winnerRound: "Maj - Augusti",
       topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Kontiki/Rio Pictures" }, { rank: 3, agency: "Forsman & Bodenfors" }]
     },
     {
       id: "ide",
       name: "Månadens Idé",
       description: "Bästa kreativa idé – oavsett kanal eller format",
-      deadlineInfo: "juni-augusti-omgången",
-      nextDeadline: "2026-08-31",
-      winnerRound: "Maj",
+      deadlineInfo: "september-omgången",
+      nextDeadline: "2026-09-30",
+      winnerRound: "Juni - Augusti",
       topList: [{ rank: 1, agency: "Forsman & Bodenfors" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Kid Collective" }]
     },
     {
@@ -404,18 +404,18 @@ window.MANADENS_DATA = {
       id: "print",
       name: "Månadens Print",
       description: "Bästa tryckta annons – tidningar, magasin",
-      deadlineInfo: "maj-augusti-omgången",
-      nextDeadline: "2026-08-31",
-      winnerRound: "Februari - April",
+      deadlineInfo: "september-november-omgången",
+      nextDeadline: "2026-11-30",
+      winnerRound: "Maj - Augusti",
       topList: [{ rank: 1, agency: "Knak Agency" }, { rank: 2, agency: "Differ Agency" }, { rank: 3, agency: "Åkestam Holst" }]
     },
     {
       id: "utomhus",
       name: "Månadens Utomhus",
       description: "Bästa utomhusreklam – affischer, DOOH, installationer",
-      deadlineInfo: "maj-augusti-omgången",
-      nextDeadline: "2026-08-31",
-      winnerRound: "Februari - April",
+      deadlineInfo: "september-november-omgången",
+      nextDeadline: "2026-11-30",
+      winnerRound: "Maj - Augusti",
       topList: [{ rank: 1, agency: "Save Our Souls" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Forsman & Bodenfors" }]
     }
   ],
@@ -445,6 +445,6 @@ window.MANADENS_DATA = {
     { rank: 15, agency: "Dear Friends", points: 9, wins: 0, podiums: 0 },
     { rank: 15, agency: "First Lady Agency", points: 9, wins: 0, podiums: 1 }
   ],
-  lastUpdated: "2026-08-31",
+  lastUpdated: "2026-09-01",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
