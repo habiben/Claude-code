@@ -445,6 +445,6 @@ window.MANADENS_DATA = {
     { rank: 15, agency: "Dear Friends", points: 9, wins: 0, podiums: 0 },
     { rank: 15, agency: "First Lady Agency", points: 9, wins: 0, podiums: 1 }
   ],
-  lastUpdated: "2026-09-03",
+  lastUpdated: "2026-09-04",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
