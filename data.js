@@ -398,7 +398,7 @@ window.MANADENS_DATA = {
       deadlineInfo: "Datum ej angivet",
       nextDeadline: "",
       winnerRound: "",
-      topList: [{ rank: 1, agency: "Ebba Busch möter Magdalena Andersson vid färjan i Visby" }, { rank: 2, agency: "SD:s luftballong" }, { rank: 3, agency: "Socialdemokraternas valaffischer på bondska" }]
+      topList: [{ rank: 1, agency: "Simona Mohamssons vinnarskalle" }, { rank: 2, agency: "Jimmie Åkessons spärrspinn" }, { rank: 3, agency: "Moderaternas Tiktok i slutspurten" }]
     },
     {
       id: "print",
@@ -445,6 +445,6 @@ window.MANADENS_DATA = {
     { rank: 15, agency: "Dear Friends", points: 9, wins: 0, podiums: 0 },
     { rank: 15, agency: "First Lady Agency", points: 9, wins: 0, podiums: 1 }
   ],
-  lastUpdated: "2026-09-17",
+  lastUpdated: "2026-09-18",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
