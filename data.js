@@ -380,7 +380,7 @@ window.MANADENS_DATA = {
       deadlineInfo: "september-november-omgången",
       nextDeadline: "2026-11-30",
       winnerRound: "Maj - Augusti",
-      topList: [{ rank: 1, agency: "Åkestam Holst" }, { rank: 2, agency: "Kontiki/Rio Pictures" }, { rank: 3, agency: "Forsman & Bodenfors" }]
+      topList: [{ rank: 1, agency: "Markus Reklambyrå" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Gärde Design Studio" }]
     },
     {
       id: "ide",
@@ -426,25 +426,27 @@ window.MANADENS_DATA = {
     description: "Poäng per placering: 1:a = 5p, 2:a = 3p, 3:a = 1p. Totalställningen summeras över årets alla omgångar."
   },
   leaderboard: [
-    { rank: 1, agency: "Åkestam Holst", points: 327, wins: 2, podiums: 5 },
+    { rank: 1, agency: "Åkestam Holst", points: 375, wins: 1, podiums: 5 },
     { rank: 2, agency: "Nord", points: 282, wins: 0, podiums: 0 },
-    { rank: 3, agency: "Forsman & Bodenfors", points: 264, wins: 1, podiums: 3 },
+    { rank: 3, agency: "Forsman & Bodenfors", points: 264, wins: 1, podiums: 2 },
     { rank: 4, agency: "Volvo Cars inhouse", points: 159, wins: 0, podiums: 0 },
     { rank: 5, agency: "Save Our Souls", points: 132, wins: 1, podiums: 1 },
     { rank: 6, agency: "BBDO Nordics", points: 99, wins: 0, podiums: 0 },
     { rank: 7, agency: "Knak", points: 90, wins: 0, podiums: 0 },
-    { rank: 8, agency: "Kontiki", points: 48, wins: 0, podiums: 0 },
-    { rank: 8, agency: "Rio Pictures", points: 48, wins: 0, podiums: 0 },
-    { rank: 8, agency: "Differ Agency", points: 48, wins: 0, podiums: 1 },
-    { rank: 11, agency: "Qvennerstedt Eghammer Malm", points: 45, wins: 0, podiums: 0 },
-    { rank: 12, agency: "Kid collective", points: 27, wins: 0, podiums: 0 },
-    { rank: 13, agency: "Stendahls", points: 24, wins: 0, podiums: 0 },
-    { rank: 13, agency: "Kurppa Hosk Communications", points: 24, wins: 0, podiums: 0 },
-    { rank: 15, agency: "Rocket-Science", points: 9, wins: 0, podiums: 0 },
-    { rank: 15, agency: "Spöket", points: 9, wins: 0, podiums: 0 },
-    { rank: 15, agency: "Dear Friends", points: 9, wins: 0, podiums: 0 },
-    { rank: 15, agency: "First Lady Agency", points: 9, wins: 0, podiums: 1 }
+    { rank: 7, agency: "Markus Reklambyrå", points: 90, wins: 1, podiums: 1 },
+    { rank: 9, agency: "Kontiki", points: 48, wins: 0, podiums: 0 },
+    { rank: 9, agency: "Rio Pictures", points: 48, wins: 0, podiums: 0 },
+    { rank: 9, agency: "Differ Agency", points: 48, wins: 0, podiums: 1 },
+    { rank: 12, agency: "Qvennerstedt Eghammer Malm", points: 45, wins: 0, podiums: 0 },
+    { rank: 13, agency: "Kid collective", points: 27, wins: 0, podiums: 0 },
+    { rank: 14, agency: "Stendahls", points: 24, wins: 0, podiums: 0 },
+    { rank: 14, agency: "Kurppa Hosk Communications", points: 24, wins: 0, podiums: 0 },
+    { rank: 16, agency: "Gärde Design Studio", points: 18, wins: 0, podiums: 1 },
+    { rank: 17, agency: "Rocket-Science", points: 9, wins: 0, podiums: 0 },
+    { rank: 17, agency: "Spöket", points: 9, wins: 0, podiums: 0 },
+    { rank: 17, agency: "Dear Friends", points: 9, wins: 0, podiums: 0 },
+    { rank: 17, agency: "First Lady Agency", points: 9, wins: 0, podiums: 1 }
   ],
-  lastUpdated: "2026-09-20",
+  lastUpdated: "2026-09-21",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
