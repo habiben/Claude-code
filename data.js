@@ -447,6 +447,6 @@ window.MANADENS_DATA = {
     { rank: 19, agency: "Rocket-Science", points: 9, wins: 0, podiums: 0 },
     { rank: 19, agency: "Spöket", points: 9, wins: 0, podiums: 0 }
   ],
-  lastUpdated: "2026-09-26",
+  lastUpdated: "2026-09-27",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
