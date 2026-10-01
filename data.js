@@ -368,9 +368,9 @@ window.MANADENS_DATA = {
       id: "film",
       name: "Månadens Film",
       description: "Bästa reklamfilm – TV, online, sociala medier",
-      deadlineInfo: "september-omgången",
-      nextDeadline: "2026-09-30",
-      winnerRound: "Juni - Augusti",
+      deadlineInfo: "oktober-omgången",
+      nextDeadline: "2026-10-29",
+      winnerRound: "September",
       topList: [{ rank: 1, agency: "Apoteket Creative Studio / Tommy & Christian" }, { rank: 2, agency: "Qvennerstedt Eghammer Malm / Newland" }, { rank: 3, agency: "Nord" }]
     },
     {
@@ -386,10 +386,10 @@ window.MANADENS_DATA = {
       id: "ide",
       name: "Månadens Idé",
       description: "Bästa kreativa idé – oavsett kanal eller format",
-      deadlineInfo: "september-omgången",
-      nextDeadline: "2026-09-30",
-      winnerRound: "Juni - Augusti",
-      topList: [{ rank: 1, agency: "Forsman & Bodenfors" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Kid Collective" }]
+      deadlineInfo: "oktober-omgången",
+      nextDeadline: "2026-10-29",
+      winnerRound: "September",
+      topList: [{ rank: 1, agency: "Glam" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Nord" }]
     },
     {
       id: "politik",
@@ -426,15 +426,15 @@ window.MANADENS_DATA = {
     description: "Poäng per placering: 1:a = 5p, 2:a = 3p, 3:a = 1p. Totalställningen summeras över årets alla omgångar."
   },
   leaderboard: [
-    { rank: 1, agency: "Åkestam Holst", points: 375, wins: 0, podiums: 3 },
-    { rank: 2, agency: "Nord", points: 339, wins: 0, podiums: 2 },
-    { rank: 3, agency: "Forsman & Bodenfors", points: 264, wins: 1, podiums: 2 },
+    { rank: 1, agency: "Åkestam Holst", points: 399, wins: 0, podiums: 3 },
+    { rank: 2, agency: "Nord", points: 348, wins: 0, podiums: 3 },
+    { rank: 3, agency: "Forsman & Bodenfors", points: 264, wins: 0, podiums: 1 },
     { rank: 4, agency: "Volvo Cars inhouse", points: 159, wins: 0, podiums: 0 },
-    { rank: 5, agency: "Save Our Souls", points: 132, wins: 1, podiums: 1 },
-    { rank: 6, agency: "BBDO Nordics", points: 99, wins: 0, podiums: 0 },
-    { rank: 7, agency: "Knak", points: 90, wins: 0, podiums: 0 },
-    { rank: 7, agency: "Markus Reklambyrå", points: 90, wins: 1, podiums: 1 },
-    { rank: 7, agency: "Glam", points: 90, wins: 1, podiums: 1 },
+    { rank: 5, agency: "Glam", points: 135, wins: 2, podiums: 2 },
+    { rank: 6, agency: "Save Our Souls", points: 132, wins: 1, podiums: 1 },
+    { rank: 7, agency: "BBDO Nordics", points: 99, wins: 0, podiums: 0 },
+    { rank: 8, agency: "Knak", points: 90, wins: 0, podiums: 0 },
+    { rank: 8, agency: "Markus Reklambyrå", points: 90, wins: 1, podiums: 1 },
     { rank: 10, agency: "Qvennerstedt Eghammer Malm", points: 69, wins: 0, podiums: 0 },
     { rank: 11, agency: "Kontiki", points: 48, wins: 0, podiums: 0 },
     { rank: 11, agency: "Rio Pictures", points: 48, wins: 0, podiums: 0 },
@@ -447,6 +447,6 @@ window.MANADENS_DATA = {
     { rank: 17, agency: "Newland", points: 24, wins: 0, podiums: 0 },
     { rank: 20, agency: "Gärde Design Studio", points: 18, wins: 0, podiums: 1 }
   ],
-  lastUpdated: "2026-09-30",
+  lastUpdated: "2026-10-01",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
