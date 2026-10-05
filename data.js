@@ -447,6 +447,6 @@ window.MANADENS_DATA = {
     { rank: 17, agency: "Newland", points: 24, wins: 0, podiums: 0 },
     { rank: 20, agency: "Gärde Design Studio", points: 18, wins: 0, podiums: 1 }
   ],
-  lastUpdated: "2026-10-04",
+  lastUpdated: "2026-10-05",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
