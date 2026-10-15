@@ -416,7 +416,7 @@ window.MANADENS_DATA = {
       deadlineInfo: "september-november-omgången",
       nextDeadline: "2026-11-30",
       winnerRound: "Maj - Augusti",
-      topList: [{ rank: 1, agency: "Save Our Souls" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Forsman & Bodenfors" }]
+      topList: [{ rank: 1, agency: "Forsman & Bodenfors" }, { rank: 2, agency: "Nord" }, { rank: 3, agency: "Åkestam Holst" }]
     }
   ],
   pointsSystem: {
@@ -426,12 +426,12 @@ window.MANADENS_DATA = {
     description: "Poäng per placering: 1:a = 5p, 2:a = 3p, 3:a = 1p. Totalställningen summeras över årets alla omgångar."
   },
   leaderboard: [
-    { rank: 1, agency: "Åkestam Holst", points: 399, wins: 0, podiums: 3 },
-    { rank: 2, agency: "Nord", points: 348, wins: 0, podiums: 3 },
-    { rank: 3, agency: "Forsman & Bodenfors", points: 264, wins: 0, podiums: 1 },
+    { rank: 1, agency: "Åkestam Holst", points: 417, wins: 0, podiums: 3 },
+    { rank: 2, agency: "Nord", points: 396, wins: 0, podiums: 4 },
+    { rank: 3, agency: "Forsman & Bodenfors", points: 354, wins: 1, podiums: 1 },
     { rank: 4, agency: "Volvo Cars inhouse", points: 159, wins: 0, podiums: 0 },
     { rank: 5, agency: "Glam", points: 135, wins: 2, podiums: 2 },
-    { rank: 6, agency: "Save Our Souls", points: 132, wins: 1, podiums: 1 },
+    { rank: 6, agency: "Save Our Souls", points: 132, wins: 0, podiums: 0 },
     { rank: 7, agency: "BBDO Nordics", points: 99, wins: 0, podiums: 0 },
     { rank: 8, agency: "Knak", points: 90, wins: 0, podiums: 0 },
     { rank: 8, agency: "Markus Reklambyrå", points: 90, wins: 1, podiums: 1 },
@@ -447,6 +447,6 @@ window.MANADENS_DATA = {
     { rank: 17, agency: "Newland", points: 24, wins: 0, podiums: 0 },
     { rank: 20, agency: "Gärde Design Studio", points: 18, wins: 0, podiums: 1 }
   ],
-  lastUpdated: "2026-10-14",
+  lastUpdated: "2026-10-15",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
