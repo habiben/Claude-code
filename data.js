@@ -447,6 +447,6 @@ window.MANADENS_DATA = {
     { rank: 18, agency: "Kurppa Hosk Communications", points: 24, wins: 0, podiums: 0 },
     { rank: 18, agency: "Newland", points: 24, wins: 0, podiums: 0 }
   ],
-  lastUpdated: "2026-10-25",
+  lastUpdated: "2026-10-26",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
