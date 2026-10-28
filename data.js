@@ -389,7 +389,7 @@ window.MANADENS_DATA = {
       deadlineInfo: "oktober-omgången",
       nextDeadline: "2026-10-29",
       winnerRound: "September",
-      topList: [{ rank: 1, agency: "Glam" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Nord" }]
+      topList: [{ rank: 1, agency: "Forsman & Bodenfors" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Differ" }]
     },
     {
       id: "politik",
@@ -426,19 +426,19 @@ window.MANADENS_DATA = {
     description: "Poäng per placering: 1:a = 5p, 2:a = 3p, 3:a = 1p. Totalställningen summeras över årets alla omgångar."
   },
   leaderboard: [
-    { rank: 1, agency: "Åkestam Holst", points: 441, wins: 0, podiums: 4 },
-    { rank: 2, agency: "Nord", points: 405, wins: 0, podiums: 4 },
-    { rank: 3, agency: "Forsman & Bodenfors", points: 354, wins: 1, podiums: 1 },
+    { rank: 1, agency: "Åkestam Holst", points: 465, wins: 0, podiums: 4 },
+    { rank: 2, agency: "Nord", points: 405, wins: 0, podiums: 3 },
+    { rank: 3, agency: "Forsman & Bodenfors", points: 399, wins: 2, podiums: 2 },
     { rank: 4, agency: "Volvo Cars inhouse", points: 159, wins: 0, podiums: 0 },
-    { rank: 5, agency: "Glam", points: 135, wins: 2, podiums: 2 },
+    { rank: 5, agency: "Glam", points: 135, wins: 1, podiums: 1 },
     { rank: 6, agency: "Save Our Souls", points: 132, wins: 0, podiums: 0 },
     { rank: 7, agency: "BBDO Nordics", points: 99, wins: 0, podiums: 0 },
     { rank: 8, agency: "Knak", points: 90, wins: 0, podiums: 0 },
     { rank: 8, agency: "Markus Reklambyrå", points: 90, wins: 1, podiums: 1 },
     { rank: 10, agency: "Qvennerstedt Eghammer Malm", points: 69, wins: 0, podiums: 0 },
-    { rank: 11, agency: "Kontiki", points: 48, wins: 0, podiums: 0 },
-    { rank: 11, agency: "Rio Pictures", points: 48, wins: 0, podiums: 0 },
-    { rank: 11, agency: "Differ Agency", points: 48, wins: 0, podiums: 0 },
+    { rank: 11, agency: "Differ Agency", points: 57, wins: 0, podiums: 0 },
+    { rank: 12, agency: "Kontiki", points: 48, wins: 0, podiums: 0 },
+    { rank: 12, agency: "Rio Pictures", points: 48, wins: 0, podiums: 0 },
     { rank: 14, agency: "Tommy & Christian", points: 45, wins: 0, podiums: 0 },
     { rank: 14, agency: "Apoteket Creative Studio", points: 45, wins: 0, podiums: 0 },
     { rank: 14, agency: "Uncut", points: 45, wins: 1, podiums: 1 },
@@ -447,6 +447,6 @@ window.MANADENS_DATA = {
     { rank: 18, agency: "Kurppa Hosk Communications", points: 24, wins: 0, podiums: 0 },
     { rank: 18, agency: "Newland", points: 24, wins: 0, podiums: 0 }
   ],
-  lastUpdated: "2026-10-27",
+  lastUpdated: "2026-10-28",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
