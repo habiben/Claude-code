@@ -368,9 +368,9 @@ window.MANADENS_DATA = {
       id: "film",
       name: "Månadens Film",
       description: "Bästa reklamfilm – TV, online, sociala medier",
-      deadlineInfo: "oktober-omgången",
-      nextDeadline: "2026-10-29",
-      winnerRound: "September",
+      deadlineInfo: "november-omgången",
+      nextDeadline: "2026-11-28",
+      winnerRound: "Oktober",
       topList: [{ rank: 1, agency: "Uncut" }, { rank: 2, agency: "Åkestam Holst" }, { rank: 3, agency: "Nord" }]
     },
     {
@@ -447,6 +447,6 @@ window.MANADENS_DATA = {
     { rank: 18, agency: "Kurppa Hosk Communications", points: 24, wins: 0, podiums: 0 },
     { rank: 18, agency: "Newland", points: 24, wins: 0, podiums: 0 }
   ],
-  lastUpdated: "2026-10-29",
+  lastUpdated: "2026-10-30",
   note: "Ställningen uppdateras efter varje månads bedömning. Besök resume.se för senaste resultat."
 };
